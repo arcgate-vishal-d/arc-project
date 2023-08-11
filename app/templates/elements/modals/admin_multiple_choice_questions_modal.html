@@ -1,0 +1,109 @@
+{% load static %}
+<style type="text/css">
+    #mcq_form .custom-input .parsley-errors-list {
+        position: absolute;
+        bottom: -22px;
+    }
+</style>
+    <div class="">
+        <div class="modal fade" id="exampleModal"  data-bs-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true" style="left: -31%">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content" style="width: 230%;">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Add Question</h5>
+                    </div>
+                    <div class="modal-body">
+                        <form data-parsley-validate method="POST" action="MCQ_views" id="mcq_form">
+                        {% csrf_token %}
+                        <input type="hidden" id="mcq_id" name="mcq_id" value="">
+                        <input type="hidden" id="mcq_method" name="method" value=""> 
+                            <div class="card custom" id="user_form">
+                                <div class="card-header">
+                                </div>
+                                <div class="card-body">
+                                    <div class="form-inline mt10">
+                                        <div class="col-md-9 mt20 custom-input">
+                                           {{mcq_form.subjects.label}}
+                                            <span class="field-validation-valid error" data-valmsg-for="SelectedSubject"
+                                                id="select_subject_error" data-valmsg-replace="true"></span>
+                                            {{mcq_form.subjects}}
+                                        </div>
+                                    </div>
+                                    <div class="form-inline mt10">
+                                        <div class="col-md-9 mt20">
+                                             {{mcq_form.passage.label}}
+                                            <span class="field-validation-valid error" data-valmsg-for="SelectedPassage"
+                                                id="select_passage_error" data-valmsg-replace="true"></span>
+                                                 {{mcq_form.passage}}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9 mt20 custom-input">
+                                        {{mcq_form.question_title.label}}
+                                        <div class="input-group">
+                                           {{mcq_form.question_title}}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt20 custom-input">
+                                        {{mcq_form.optionA.label}}
+                                        <div class="input-group">
+                                           {{mcq_form.optionA}}
+                                            <span class="input-group-addon">
+                                                <input id="chkboxOption0" value="optionA" type="radio"
+                                                    name="AnswerKey" checked>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt20 custom-input">
+                                        {{mcq_form.optionB.label}}
+                                        <div class="input-group">
+                                            {{mcq_form.optionB}}
+                                            <span class="input-group-addon">
+                                                <input id="chkboxOption1" value="optionB" type="radio"
+                                                    name="AnswerKey">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt20 custom-input">
+                                         {{mcq_form.optionC.label}}
+                                        <div class="input-group">
+                                            {{mcq_form.optionC}}
+                                            <span class="input-group-addon">
+                                                <input id="chkboxOption2" value="optionC" type="radio"
+                                                    name="AnswerKey">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt20 custom-input">
+                                         {{mcq_form.optionD.label}}
+                                        <div class="input-group">
+                                            {{mcq_form.optionD}}
+                                            <span class="input-group-addon">
+                                                <input id="chkboxOption3" value="optionD" type="radio"
+                                                    name="AnswerKey">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mt10">
+                                        <div class="pull-right" style="margin: 5px;">
+                                            <button type="button" id="close-dialoge" value="close" class="btn btn-secondary btn-sm waves-effect waves-dark pull-right"  data-bs-dismiss="modal">Cancel</button>
+                                        </div>
+                                        
+                                        <div class="pull-right" style="margin: 5px;">
+                                            <button type="submit" id="add_question_btn" value="Save"
+                                                class="btn btn-primary btn-sm waves-effect waves-dark pull-right" >Save</button>
+                                        </div>
+                                        <div class="validation-summary-valid red-text" data-valmsg-summary="true">
+                                            <ul>
+                                                <li style="display:none"></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

@@ -1,0 +1,239 @@
+{% load static %}
+{% include 'candidate_style.html' %}
+
+<style>
+    .parsley-required {
+        margin-right: 275px;
+    }
+</style>
+
+<body>
+    <div class="text-center ArcOrange" style="margin-top:-20px;  margin-bottom: -20px;">
+        <img src="{% static 'assets/images/arcgate-image.png' %}" width="125" alt=""
+            title="ArcGate Interview">
+    </div>
+    <div class="container-fluid">
+        <div id="searchResult">
+            <div class="container-fluid">
+                <form action="/candidate_source_of_info" method="POST" data-parsley-validate id="source_form">
+                    {% csrf_token %}
+                    <div class="factsheet referral-details animated" style="margin-top:60px;">
+                        <div class="text-center border border-light p-5">
+                            <p class="h4 mb-5" style="color:#e3a04d;"><u>Source of Information</u></p>
+                            <div>
+                                <div class="form-row  mb-4">
+                                    <div class="col fact-radio">
+                                        <h5 style="margin-right:460px;">Have you ever been interviewed in Arcgate?</h5>
+                                        <div style="margin-right:770px; margin-top:15px;" class="col-md-12 row"
+                                            data-parsley-multiple="interviewed" >
+                                            <input type="radio" class="form-control" id="candidate_interviewed_yes"
+                                                name="interviewed" value="1" style="margin-right:20px;"
+                                                onclick="validate_interviewed(); validate_data();" data-parsley-required>
+                                            <label for="candidate_interviewed_yes">Yes</label>
+                                            <input type="radio" class="form-control" id="candidate_interviewed_no"
+                                                name="interviewed" value="0" style="margin-right:20px;"
+                                                onclick="validate_interviewed();validate_data();">
+                                            <label for="candidate_interviewed_no">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row  mb-4" id="arcgate_worked" style="display:none;">
+                                    <div class="col fact-radio">
+                                        <h5 style="margin-right:525px;">Have you Worked in Arcgate before?</h5>
+                                        <div style="margin-right:770px; margin-top:15px;" class="col-md-12 row"
+                                            data-parsley-multiple="worked">
+                                            <input type="radio" class="form-control" id="candidate_worked_yes"
+                                                name="worked" value="1" style="margin-right:20px;" checked="checked" >
+                                            <label for="candidate_worked_yes">Yes</label>
+                                            <input type="radio" class="form-control" id="candidate_worked_no"
+                                                name="worked" value="0" style="margin-right:20px;" checked>
+                                            <label for="candidate_worked_no">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-row  mb-4">
+                                    <div class="col fact-radio">
+                                        <h5 style="margin-right:-455px;">What is the source of information for showing
+                                            interest in ARCGATE? Please tick appropriate options </h5>
+                                        <div class="form-row">
+                                            <div class="col fact-radio" style="margin-top:20px;">
+                                                <input id="candidate_campus" name="information_for_hiring"
+                                                    type="checkbox" value="CAMPUS" checked>
+                                                <label for="candidate_campus">Arcgate Campus Drive</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col fact-radio">
+                                                <input id="candidate_website" name="information_for_hiring"
+                                                    type="checkbox" value="WEBSITE">
+                                                <label for="candidate_website">Arcgate Website</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col fact-radio">
+                                                <input id="candidate_employee" name="information_for_hiring"
+                                                    type="checkbox" value="EMPLOYEE">
+                                                <label for="candidate_employee">Arcgate Employee</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col fact-radio">
+                                                <input id="candidate_social_media" name="information_for_hiring"
+                                                    type="checkbox" value="SOCIAL MEDIA">
+                                                <label for="candidate_social_media">Arcgate Social Media</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col fact-radio">
+                                                <input id="candidate_walk_in" name="information_for_hiring"
+                                                    type="checkbox" value="WALK IN">
+                                                <label for="candidate_walk_in">Walk-In</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col fact-radio">
+                                                <input id="candidate_friends" name="information_for_hiring"
+                                                    type="checkbox" value="FRIENDS">
+                                                <label for="candidate_friends">Friends/Family</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col fact-radio">
+                                                <input id="candidate_others" name="information_for_hiring"
+                                                    type="checkbox" value="OTHER">
+                                                <label for="candidate_others">Others</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col fact-radio" id="trig-news">
+                                                <input type="checkbox" id="candidate_newspaper"
+                                                    name="information_for_hiring" onclick="validate_newspaper(); validate_newspaper_value();"
+                                                    value="NEWSPAPER">
+                                                <label for="candidate_newspaper">Newspaper</label>
+                                            </div>
+                                        </div>
+
+                                        <div id="divnewsPapers" class="col fact-radio newspaper"
+                                            style="margin-top:0px; display:none;">
+                                            <input id="candidate_patrika" class="useful_patrika" name="information_for_hiring" type="checkbox"
+                                                value="PATRIKA" class="preventUncheck" disabled="True" >
+                                            <label for="candidate_patrika" style="margin-right:4px;">Rajasthan
+                                                Patrika</label>
+                                            <input id="candidate_bhaskar" name="information_for_hiring" type="checkbox" class="preventUncheck"
+                                                value="BHASKAR">
+                                            <label for="candidate_bhaskar" style="margin-right:0px;">Dainik
+                                                Bhaskar</label>
+                                            <input id="candidate_others_newspaper" name="information_for_hiring" class="preventUncheck"
+                                                type="checkbox" value="OTHER">
+                                            <label for="candidate_others_newspaper">Other</label>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="col fact-radio">
+                                                <input id="candidate_consultancy" name="information_for_hiring"
+                                                    type="checkbox" onclick="validate_consultancy()"
+                                                    value="CONSULTANCY">
+                                                <label for="candidate_consultancy">Job Consultancy</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-row" id="divconsultancy" style="margin-top:0px; display:none;">
+                                            <div class="col-md-6">
+                                                <input type="text" class="form-control" name="consultancy_name"
+                                                     placeholder="Consultancy Name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+
+                            <div class="form-row mb-4">
+                                <div class="col text-right">
+                                    <button class="btn btn-primary btn-sm waves-effect waves-dark pull-right"
+                                        name="action" style="margin-right: 2%; width: 10%;" type="submit">save</button>
+                                    <button id="btnPrevious"
+                                        class="btn btn-primary btn-sm waves-effect waves-dark pull-right" name="action"
+                                        style="margin-right: 2%; width: 10%;">Previous</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+{% include 'candidate_script.html' %}
+<script>
+
+    $('#btnPrevious').click(function () {
+        $('#source_form').parsley().destroy();
+        parent.history.back()
+        return false
+    })
+
+    function validate_newspaper() {
+        var newspaper = document.getElementById("candidate_newspaper");
+        if (newspaper.checked) {
+            $("#divnewsPapers").show();
+        } else {
+            $("#divnewsPapers").hide();
+        }
+    }
+
+    function validate_consultancy() {
+        var consultancy = document.getElementById("candidate_consultancy");
+        if (consultancy.checked) {
+            $("#divconsultancy").show();
+        } else {
+            $("#divconsultancy").hide();
+        }
+    }
+
+    function validate_interviewed() {
+        var worked_yes = document.getElementById("candidate_interviewed_yes");
+
+        if (worked_yes.checked) {
+            $('#arcgate_worked').show();
+        }
+        else {
+            $('#arcgate_worked').hide();
+        }
+    }
+
+    function validate_data() {
+        if ($('#candidate_interviewed_no').is(':checked')) {
+            $('#candidate_worked_yes').prop('disabled', true);
+        }
+        else{
+            $('#candidate_worked_yes').prop('disabled', false);
+        }
+    }
+
+    $(document).ready(function() {
+
+        $('input[id="candidate_consultancy"]').change(function() {
+    
+            if ($('input[type="text"]').attr('required')) {
+                $('input[type="text"]').removeAttr('required');
+            } 
+    
+            else {
+                $('input[type="text"]').attr('required','required');
+            }
+    
+        });
+    
+    });
+</script>
+<script>
+    function validate_newspaper_value(){
+        var newspaper_data = document.getElementById("candidate_newspaper");
+        if (newspaper_data.checked){
+            $('#candidate_patrika').attr('checked', 'required');
+        }else{
+            $('#candidate_patrika').attr('disabled', 'disabled');
+            $('#candidate_bhaskar').removeAttr('required');
+        }
+    }
+</script>

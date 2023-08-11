@@ -1,0 +1,78 @@
+{% load static %}
+{% include 'candidate_style.html' %}
+
+<style type="text/css">
+    .a .img-fix-size {
+        height: 75px;
+        width: 100px;
+        margin: 2%;
+    }
+</style>
+<div class="container-fluid">
+    <div id="divClock" class="circle ui-draggable ui-draggable-handle">
+        <h3>
+            <span id="timer"></span>
+        </h3>
+    </div>
+
+    <div id="searchResult">
+        <div class="test-paper-main">
+            <form action="/exam" method="POST" onsubmit="btnnext.disabled = true;">
+           {% csrf_token %}
+           <input type="hidden" id="hdnDuration" name="hdnDuration" value="{{timer}}">
+            {% for subject,questions in dict.items %}
+                {% for question in questions %}
+                <input id="candidate_paper_id" name = "candidate_paper_id" type="hidden" value = "{{candidate_paper_id}}">
+                <input id="selectedQuestionID" name="selectedQuestionID" type="hidden" value="{{question.question_id.id}}">
+                <input id="QuestionType" name="QuestionType" type="hidden" value="{{question.question_id.type}}">
+                <input id="sheet_id" name="sheet_id" type="hidden" value="{{sheet_id}}">
+                    {% for relevent_subject,remaining_question in attempt.items %}
+                        {% if relevent_subject.subject == subject.subject %}
+                             <h3 style="width:fit-content; margin-left: 5%;word-break: break-all ;">{{subject.subject}}({{remaining_question|add:'1'}}/{{subject.subject_questions}})</h3>
+                        {% endif %}
+                    {% endfor %}
+                    <hr>
+                        <!-- multiple choice question -->
+                        {% if question.question_id.type == 'multiple choice question' %}
+                           {% include 'candidate_question_type/candidate_mcq_type.html' %}
+                       
+                           <!-- image based multiple choice question -->
+                        {% elif question.question_id.type == 'image based MCQ' %}
+                           {% include 'candidate_question_type/candidate_img_mcq_type.html' %}
+                          
+                           <!-- subjective question -->
+                        {% elif question.question_id.type == 'subjective question' %}
+                           {% include 'candidate_question_type/candidate_subjectice_type.html' %}
+                           
+                           <!-- image based subjective question -->
+                        {% elif question.question_id.type == 'Image based subjective question' %}
+                           {% include 'candidate_question_type/candidate_img_subjective_type.html' %}
+                           
+                           <!-- multi image choice question -->
+                        {% elif question.question_id.type == 'Multiple Image Choice Question' %}
+                           {% include 'candidate_question_type/candidate_micq_type.html' %}
+
+                           <!-- typing test question -->
+                        {% elif question.question_id.type == 'Passage/Instruction' %}
+                           {% include 'candidate_question_type/candidate_typing_question.html' %}
+
+                           <!-- excel question -->
+                        {% elif question.question_id.type == 'excel questions' %}
+                            {% include 'candidate_question_type/candidate_excel_question.html' %}
+                        {% endif %}
+                        <div class="pull-right">
+                            <button style="margin-right: 120%; width: 150%;" type="submit" id="btnnext" value="submit"  class="btn btn-primary pull-right AddRecordBtn blue-text"
+                             {%if question.question_id.type == 'Passage/Instruction' %} onclick="nextTyping()" {% elif question.question_id.type == 'excel questions' %} onclick = "confirm_save()" {% endif %} onclick="updateDuration()">Next</button>
+                        </div> &nbsp; &nbsp;
+                        <hr>
+                {% endfor %}
+            {% endfor %}
+            </form>
+        </div>
+    </div>
+</div>
+
+{% include 'candidate_script.html' %}
+<script language="JavaScript" type="text/javascript" src="{% static 'assets/js/exam.js' %}"></script>
+</body>
+</html>

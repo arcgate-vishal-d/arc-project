@@ -1,0 +1,87 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+    <div class="container-fluid mt80">
+        {% include "elements/messages.html" %}
+        <div class="row mt10 main-page-list mb80">
+            {% if request.user.is_superuser %} 
+            <div class="col-md-3 mt10">
+                <div class="card">
+                    <div class="card-header deep-orange lighten-1 white-text">
+                        Questions Settings
+                    </div>
+                    <h5 class="card-title">Prepare Questions</h5>
+                    <div class="card-body">
+                        <div class="list-group">
+                            <a class="list-group-item list-group-item-action" href="/multiple_img_choice_que">Multiple Image Choice Question</a>
+                            <a class="list-group-item list-group-item-action" href="/mulitple_choice_question">Multiple Choice Question</a>
+                            <a class="list-group-item list-group-item-action" href="/admin_image_mcq">Image Based Multiple Choice Questions</a>
+                            <a class="list-group-item list-group-item-action" href="/subjective_questions">Subjective Questions</a>
+                            <a class="list-group-item list-group-item-action" href="/img_subjective">Image Based Subjective Questions</a>
+                            <a class="list-group-item list-group-item-action" href="/excel_question">Excel Questions</a>
+                            <a class="list-group-item list-group-item-action" href="/passage_content">Passage/Instructions Content</a>
+                            <!-- <a class="list-group-item list-group-item-action" href="">Internet Search Test</a> -->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if request.user.is_superuser or request.user.is_staff %} 
+            <div class="col-md-3 mt10">
+                <div class="card">
+                    <div class="card-header deep-orange lighten-1 white-text">
+                        Paper Settings
+                    </div>
+                    <h5 class="card-title">Description: Create Test Paper and Settings </h5>
+                    <div class="card-body">
+                        <div class="list-group">
+                            <a class="list-group-item list-group-item-action" href="/paper_setup">Paper Setup</a> 
+                            <a class="list-group-item list-group-item-action" href="/reset_test">Reset User on Test</a>
+                            <a class="list-group-item list-group-item-action" href="/set_today_paper">Set Todays Papers</a>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            <div class="col-md-3 mt10">
+                <div class="card">
+                    <div class="card-header deep-orange lighten-1 white-text">
+                        Result
+                    </div>
+                    <h5 class="card-title">Result</h5>
+                    <div class="card-body">
+                        <div class="list-group">
+                            <a class="list-group-item list-group-item-action" href="/admin_view_result">View Results</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if request.user.is_superuser %} 
+            <div class="col-md-3 mt10">
+                <div class="card">
+                    <div class="card-header deep-orange lighten-1 white-text">
+                        Admin Settings
+                    </div>
+                    <h5 class="card-title">Panel Settings:- Super Admin</h5>
+                    <div class="card-body">
+                        <div class="list-group">
+                            <a class="list-group-item list-group-item-action" href="/admin_user">Allow Authenticated User</a>
+                            <a class="list-group-item list-group-item-action" href="/subject">Add Subject</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container-fluid">
+            <span class="text-muted">Footer content here.</span>
+        </div>
+    </footer>
+<div class="hiddendiv common"></div>
+{% include 'admin_script.html' %}
+</body>
+</html>

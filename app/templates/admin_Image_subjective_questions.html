@@ -1,0 +1,157 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+
+<div class="container-fluid mt80">
+    <h5>Single Line Answer Questions With Image</h5>
+    <div class="col-md-12 custom">
+        <div class="card row">
+            <div class="card-header">
+                <span>Apply Filter</span>
+                <button id="IBSQ_addButton" class="ModalOpen btn btn-primary pull-right AddRecordBtn blue-text"
+                    data-bs-toggle="modal" data-bs-target="#exampleModal" type="button" style="border-radius:55px;">Add
+                    Question</button>
+            </div>
+
+            <form method="get" action="">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="form-inline mt10 mb10">
+                        <div class="col-md-3 ">
+                            {{ search_form.question.label }} {{ search_form.question }}
+                        </div>
+                        <div class="col-md-3 " style="margin-bottom:15px;">
+                            {{ search_form.subjects.label }} {{ search_form.subjects }}
+                        </div>
+                        <div class="col-md-2">
+                            <div class="waves-input-wrapper waves-effect waves-light">
+                                <input type="submit" id="" value="Search"
+                                    class="btn btn-primary btn-sm waves-effect waves-dark"
+                                    style="padding-top: 10px;bottom: 0px;margin-top: 8px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DATA RENDER HTML -->
+    <div id='loader_id' class=""></div>
+    <div class="">
+        <table id="tblQuestions" class="table table-sm" cellpadding="0" cellspacing="0">
+            <thead class="mdb-color darken-3">
+                <tr class="text-white wdth80 text-center">
+                    <th class="wdth80 text-center" style="width:12%;">Image</th>
+                    <th style="width: 23%;">Question</th>
+                    <th style="width: 25%;">Answer Key</th>
+                    <th style="width: 10%;">Subject</th>
+                    <th style="width: 8%;">Created By</th>
+                    <th style="width: 8%;">Created Date</th>
+                    <th style="width: 14%;">Actions</th>
+                </tr>
+            </thead>
+            <tr id="datavalue"></tr>
+            <tbody id="demo">
+                {% include "elements/messages.html" %}
+                {% for question in data %}
+                <tr id="row_data_{{ question.id }}">
+                    <td class="text-center ">
+                        <div class="a" id="image_show" style="padding: 2px; margin-right: 28%;">
+                            <img src="{{ question.image.url }}" style="height: 150px; width: 200px; ;">
+                        </div>
+                    </td>
+
+                    <td class="EditData" id="epic" style="text-align: center; word-break: break-all">
+                        {{ question.question_title }}
+                        <span></span>
+                    </td>
+
+                    <td class="EditSubject" style="text-align: center; word-break: break-all">
+                        {{ question.answer_key }}
+                        <span></span>
+                    </td>
+
+                    <td style="text-align: center;word-break: break-all" id="{{ question.question_id.subject.id }}">
+                        {{ question.question_id.subject }}
+                        <span></span>
+                    </td>
+
+                    <td style="text-align: center;">
+                        {{ question.created_by }}
+                        <span></span>
+                    </td>
+
+                    <td style="text-align: center;">
+                        {{ question.modified|date:"d.m.Y" }}
+                        <span></span>
+                    </td>
+
+                    <td style="text-align: center;">
+                        <a class="Edit btn btn-info btn-sm waves-effect waves-light editButton"
+                            id="editButton_{{ question.id }}" type="button" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal" style="display: inline-block;">Edit</a>
+                        <span style="display:inline-block;">
+                            <form action="/img_sub_request" method="POST"
+                                onSubmit="return confirm('Do you want to delete this question?')">
+                                {% csrf_token %}
+                                <input type="hidden" name="method" value="delete"></input>
+                                <input type="hidden" value="{{question.id}}" name="question_id">
+                                <button class="Delete btn btn-danger btn-sm waves-effect waves-light" type="submit"
+                                    id="Delete" href="/img_sub_request">Delete</button>
+                            </form>
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container-fluid">
+        <span class="text-muted">Footer content here.</span>
+    </div>
+</footer>
+
+{% include 'admin_script.html' %}
+{% include 'elements/modals/img_subjective_que_modal.html' %}
+{% include 'elements/pagination.html' %}
+
+<script>
+
+    $("#IBSQ_addButton").on("click", function () {
+        $("#demo-form").parsley().reset();
+        $("#demo-form")[0].reset();
+        $("#upload").attr('src', "");
+        $("#modalHeading").html("ADD NEW QUESTION");
+        $('#IBSQ_image_upload').attr('required',true);
+        $('#IBSQ_image_upload').attr('data-parsley-required',true)
+    })
+
+    $(".editButton").on("click", function (e) {
+        $("#demo-form").parsley().reset();
+        $("#demo-form")[0].reset();
+        $("#modalHeading").html("UPDATE QUESTION");
+
+        var row_id = e.currentTarget.id.slice(11,)
+        var row_data = document.getElementById("row_data_" + row_id)
+
+        var image = row_data.cells[0].querySelector('img').getAttribute('src');
+        var question = row_data.cells[1].innerText;
+        var answer = row_data.cells[2].innerText;
+        var subject = row_data.cells[3].getAttribute('id')
+
+        $('#IBSQ_image_upload').attr('required',false);
+        $('#IBSQ_image_upload').attr('data-parsley-required',false)
+        $("#upload").attr('src', image);
+        $("#IBSQ_question").val(question);
+        $("#IBSQ_answer_key").val(answer);
+        $("#IBSQ_subject").val(subject);
+        $("#hiddenID").val(row_id)
+        $("#editMethod").val("put");
+    })
+</script>
+</body>
+</html>

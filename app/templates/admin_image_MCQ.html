@@ -1,0 +1,151 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+
+<div class="container-fluid mt80">
+    <h5>Multiple Choice Questions on Image basis</h5>
+    <div class="col-md-12 custom">
+        <div class="card row">
+            <div class="card-header">
+                <span>Apply Filter</span>
+                <button style="border-radius: 55px;" type="button"
+                    class="btn btn-primary pull-right AddRecordBtn blue-text" id="addButton" type="button"
+                    data-bs-toggle="modal" data-bs-target="#exampleModal" style="border-radius: 55px;">Add Question
+                </button>
+            </div>
+
+            <form method="get" action="">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="form-inline mt10 mb10">
+
+                        <div class="col-md-3">
+                            {{ search_form.question_title.label }} {{ search_form.question_title }}
+                        </div>
+                        <div class="col-md-3 " style="margin-bottom:18px;">
+                            {{ search_form.subject.label }} {{ search_form.subject }}
+                        </div>
+                        <div class="col-md-2">
+                            <div class="waves-input-wrapper waves-effect waves-light">
+                                <input type="submit" id="" value="Search"
+                                    class="btn btn-primary btn-sm waves-effect waves-dark"
+                                    style="padding-top: 10px;bottom: 0px;margin-top: 8px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <table id="tblQuestions" class="table table-sm" cellpadding="0" cellspacing="0">
+        <thead class="mdb-color darken-3">
+            <tr class="text-white">
+                <th class="text-center"> Image</th>
+                <th class="width40per text-center">Question & options</th>
+                <th class="text-center">Subject</th>
+                <th class="text-center">Created By</th>
+                <th class="text-center">Created Date</th>
+                <th class="text-center">Action</th>
+            </tr>
+        </thead>
+        <tr id="datavalue"></tr>
+        <tbody id="demo">
+            {% include "elements/messages.html" %}
+            {% for image_mcq in data %}
+            <tr class="panel-heading" style="display:;" id="mcq{{image_mcq.id}}">
+                <td class="text-center">
+                    <div class="a" style="padding: 2px;">
+                        <img src="{{ image_mcq.image.url }}" style="height: 150px;width: 200px;">
+                    </div>
+                </td>
+                <td class="EditData width40per" style="text-align:initial; word-break: break-all">
+                    <h5><strong>Q.</strong>{{image_mcq.question_title}}</h5>
+                    <p align="justify" {% if image_mcq.answer_key == image_mcq.optionA %} style="color: green; word-break: break-all" {% else %}{% endif %}><strong>A.</strong>{{image_mcq.optionA}}</p>
+                    <p align="justify" {% if image_mcq.answer_key == image_mcq.optionB %} style="color: green;word-break: break-all" {% else %}{% endif %}><strong>B.</strong>{{image_mcq.optionB}}</p>
+                    <p align="justify" {% if image_mcq.answer_key == image_mcq.optionC %} style="color: green; word-break: break-all" {% else %}{% endif %}><strong>C.</strong>{{image_mcq.optionC}}</p>
+                    <p align="justify" {% if image_mcq.answer_key == image_mcq.optionD %} style="color: green; word-break: break-all" {% else %}{% endif %}><strong>D.</strong>{{image_mcq.optionD}}</p>
+                </td>
+
+                <td class="EditSubject" style="text-align: center;" id="{{image_mcq.question_id.subject.id}}">
+                    <span>{{ image_mcq.question_id.subject }}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span>{{ image_mcq.created_by }}</span>
+                </td>
+                <td style="text-align: center;">
+                    <span>{{ image_mcq.modified|date:"d.m.Y" }} </span>
+                </td>
+                <td style="text-align:center;">
+                    <a class="Edit btn btn-info btn-sm waves-effect waves-light editButton"
+                        id="editButton{{ image_mcq.id }}" type="button" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal" style="display: inline-block;">Edit</a>
+                    <span style="display: inline-block;">
+                        <form action="/image_mcq_post" method="POST"
+                            onSubmit="return confirm('Do you want to delete this content ?')">
+                            {% csrf_token %}
+                            <input type="hidden" name="method" value="delete"></input>
+                            <input type="hidden" value="{{ image_mcq.id }}" name="mcq_id">
+                            <button class="Delete btn btn-danger btn-sm waves-effect waves-light" type="submit"
+                                id="Delete">Delete</button>
+                        </form>
+                    </span>
+                </td>
+                {% endfor %}
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% include 'admin_script.html' %}
+<!-- Modal -->
+{% include 'elements/modals/admin_image_mcq_modal.html' %}
+<!-- Pagination  -->
+{% include 'elements/pagination.html' %}
+
+<script>
+    $("#addButton").on("click", function () {
+        $("#demo-form").parsley().reset()
+        $("#demo-form")[0].reset()
+        $('#imgPreview').attr('src', "")
+        $("#modalHeading").html("Add Question");
+        $('#MCQ_image_upload').attr('required',true);
+        $('#MCQ_image_upload').attr('data-parsley-required',true)
+    })
+
+    $(".editButton").on("click", function (e) {
+        $("#demo-form").parsley().reset()
+        $("#modalHeading").html("Edit Question");
+        var row_id = e.currentTarget.id.slice(10,);
+        var row_data = document.getElementById("mcq" + row_id);
+        var image = row_data.cells[0].querySelector('img').getAttribute('src')
+        var question_title = row_data.cells[1].querySelector('h5').innerText.slice(2,);
+        var option_a = row_data.cells[1].querySelectorAll('p')[0].innerText.slice(2,);
+        var option_b = row_data.cells[1].querySelectorAll('p')[1].innerText.slice(2,);
+        var option_c = row_data.cells[1].querySelectorAll('p')[2].innerText.slice(2,);
+        var option_d = row_data.cells[1].querySelectorAll('p')[3].innerText.slice(2,);
+        var options = row_data.cells[1].querySelectorAll('p');
+        var subject = row_data.cells[2].getAttribute('id');
+        for (let i = 0; i < options.length; i++) {
+            if (options[i].getAttribute('style')) {
+                $('#chkboxOption'+[i]).attr('checked', true)
+            } else {
+                $('#chkboxOption'+[i]).attr('checked', false)
+            }
+        }
+        $('#MCQ_image_upload').attr('required',false);
+        $('#MCQ_image_upload').attr('data-parsley-required',false)
+        $("#imgPreview").attr('src', image);
+        $("#image_MCQ_subject").val(subject);
+        $("#image_MCQ_title").val(question_title);
+        $("#image_MCQ_optionA").val(option_a);
+        $("#image_MCQ_optionB").val(option_b);
+        $("#image_MCQ_optionC").val(option_c);
+        $("#image_MCQ_optionD").val(option_d);
+        $("#mcq_id").val(row_id);
+        $("#mcq_method").val("put");
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+<div class="container-fluid mt80">
+    <h5>Reset Test</h5>
+    <div class="ControlPanel col-md-12 custom">
+        <!-- message -->
+        {% include "elements/messages.html" %}
+        <div class="card row">
+            
+            <form action="" id="form0" method="post" data-parsley-validate>
+                {% csrf_token %}
+                <div class="card-body">
+                        <div class="form-inline my-2">
+                            <div class="col-md-3 mt10">
+                                <div class="input-group">
+                                    <select class="form-control" id="SelectedCandidate" name="SelectedCandidate" data-parsley-required="true">
+                                        <option value="">Please Select Candidate</option>
+                                        {% for candidate in candidates %}
+                                        <option value="{{ candidate.id }}">{{candidate.first_name}}&nbsp;{{candidate.last_name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <button type="submit" id="btnSave" value="Save" class="btn btn-primary btn-sm waves-effect waves-dark">Reset Test</button>
+                            </div>
+                        </div>
+                        <img id="addQImgLoader" src="./admin_reset_test_files/small_loader.gif" style="display:none;">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% include 'admin_script.html' %}
+</body>
+</html>

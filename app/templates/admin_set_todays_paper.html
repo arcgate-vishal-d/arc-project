@@ -1,0 +1,100 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+
+<div class="container-fluid mt80">
+    <h5>Today's Paper</h5>
+    <div class="container-fluid mt20 mb30">
+        <div class="card text-center">
+            <div class="card-body">
+                <table border="0" width="100%">
+                    <tbody>
+                        {% for paper, details in current_paper.items %}
+                        <tr>
+                            <td class="font-bold">Test level:</td>
+                            <td><span class="bdr-dashed">{{details.paper_set.test_level}}</span> </td>
+                            <td class="font-bold">Selected paper:</td>
+                            <td><span class="bdr-dashed" style="word-break: break-all;">{{details.paper_set}}</span> </td>
+                            <td class="font-bold">Set on date:</td>
+                            <td><span class="bdr-dashed">{{details.date|date:"M d, Y"}}</span> </td>
+                            <td class="font-bold">Set by:</td>
+                            <td><span class="bdr-dashed">{{details.set_by}}</span> </td>
+                        </tr>  
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    
+    <div class="ControlPanel col-md-12 custom">
+        <div class="card row">
+            <div class="card-header">
+                <strong> Apply Filter </strong>
+            </div>
+            <form method="get" action="">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="form-inline mt10 mb10">
+                        <div class="col-md-3 mt10">
+                            {{ search_paper_form.paper_sets.label }} {{ search_paper_form.paper_sets }}
+                        </div>
+                        <div class="col-md-3 mt10">
+                            {{ search_paper_form.test_levels.label }} {{ search_paper_form.test_levels }}
+                        </div>
+                        <div class="col-md-3">
+                            <div class="waves-input-wrapper waves-effect waves-light">
+                                <input type="submit" id="" value="Search" class="btn btn-primary btn-sm waves-effect waves-dark" 
+                                style="padding-top: 10px;bottom: 0px;margin-top: 30px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <!-- paper set table -->
+            <table id="tblSubject" class="table table-sm" cellpadding="0" cellspacing="0" style="display:;">
+                <thead class="mdb-color darken-3 white-text">
+                    <tr class="text-white wdth80 text-center">
+                        <th class="width30per text-center" style="width: 20px ">Paper sets</th>
+                        <th class="width20per text-center">Test level</th>
+                        <th class="width20per text-center">Created Date</th>
+                        <th class="width30per text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="demo">
+                    {% include 'elements/messages.html' %}
+                    {% for paper_set in data %}
+                    <tr class="panel-heading">
+                        <td class="text-center" style="word-break: break-all;">
+                            {{ paper_set.paper_title }}
+                        </td>
+                        <td class="text-center" style="word-break: break-all;">
+                            {{ paper_set.test_level.test_level }}
+                        </td>
+                        <td class="text-center">
+                            {{paper_set.modified|date:"d.m.Y"}}
+                        </td>
+                        <td class="text-center">
+                            <form action="" method="POST"
+                                    onSubmit="return confirm('Do you want to set this paper set for today ?')">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{paper_set.id}}" name="today_paper_set_id" id ="set_paper_{{paper_set.id}}">
+                                    <button class="btn btn-info btn-sm waves-effect waves-light" type="submit"
+                                        id="Set" value="{{paper_set.id}}" name="set">Set</button>
+                            </form>
+                            <img id="addQImgLoader" src="static/assets/images/small_loader.gif" style="display:none;">
+                        </td>
+                    </tr> 
+                    {% endfor %}
+                </tbody>
+            </table>
+    </div>
+</div>
+
+{% include 'admin_script.html' %}
+<!-- Pagination  -->
+{% include 'elements/pagination.html' %}
+</body>
+</html>

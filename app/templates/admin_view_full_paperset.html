@@ -1,0 +1,158 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+<body>
+<div class="container-fluid mt80">
+    <div class="ControlPanel">
+        <div class="card mb10 ">
+            <div class="card-header">
+                Paper Full Paper Setup Detail
+            </div>
+            <div class="card-body">
+                <table width="100%" class="mt-bottom10">
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">Department:</td>
+                            <td>
+                                <span>
+                                    <label for="KPO">{{ paper.department }}</label>
+                                </span>
+                           </td>
+                            <td class="font-bold">Paper Name:</td>
+                            <td>
+                                <span>
+                                    <label for="Temp" style="word-break: break-all ;">{{paper.paper_title}}</label>
+                                </span>
+                            </td>
+                            <td class="font-bold">Paper Marks:</td>
+                            <td colspan="2">
+                                <span>
+                                    <label for="Temp">{{paper.paper_marks}}</label>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Paper Time:</td>
+                            <td>
+                                <span>
+                                    <label for="">{{paper.paper_time}}</label>
+                                </span>
+                            </td>
+                            <td class="font-bold">Test level:</td>
+                            <td>
+                                <span>
+                                    <label for="Temp" style="word-break: break-all ;">{{paper.test_level}}</label>
+                                </span>
+                            </td>
+                            <td class="font-bold">Paper Description: </td>
+                            <td colspan="2">
+                                <span>
+                                    <label for="Temp" style="word-break: break-all ;">{{paper.paper_description}}</label>
+                                </span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+       </div>
+       {% for subject, value in dict.items %}
+       <h1><span class="font-bold font-size18 mdb-color px-3 py-1 darken-3 white-text" style="color:blue">{{subject.subject}}</span></h1>
+       <div class="ques-main {{subject.subject}}">
+                {% for question in value %}
+                    {% if question.question_id.type == 'Multiple Image Choice Question' %}
+                            <div class="options" >
+                                <div style="margin-left:20px;">
+                                    <span class="font-size16 pd-left15" style="word-break: break-all ;">
+                                        <b>
+                                            {{ forloop.counter }}.{{question.question_title}}
+                                        </b>
+                                    </span>
+                                </div>
+                                    <br>
+                                    <div class="options">
+                                    <div class="pd-left40 pd-bottom5">
+                                        <span style="margin-left: 17px;" >(1)</span><img {% if question.optionA.url == question.answer_key.url %} style="height:150px; width:150px; border-style: solid; border-color: green;" {% else %} style="height:150px; width:150px; border-style: solid; border-color: black;"{% endif %} src="{{question.optionA.url}}" ></span>
+                                    
+                                        <span style="margin-left: 17px;">(2)</span><img {% if question.optionB.url == question.answer_key.url %} style="height:150px; width:150px; border-style: solid; border-color: green;" {% else %} style="height:150px; width:150px; border-style: solid; border-color: black;"{% endif %} src="{{question.optionB.url}}" ></span>
+                                    
+                                        <span style="margin-left: 17px;">(3)</span><img {% if question.optionC.url == question.answer_key.url %} style="height:150px; width:150px; border-style: solid; border-color: green;" {% else %} style="height:150px; width:150px; border-style: solid; border-color: black;"{% endif %} src="{{question.optionC.url}}" ></span>
+                                    
+                                        <span style="margin-left: 17px;">(4)</span><img {% if question.optionD.url == question.answer_key.url %} style="height:150px; width:150px; border-style: solid; border-color: green;" {% else %} style="height:150px; width:150px; border-style: solid; border-color: black;"{% endif %} src="{{question.optionD.url}}" ></span>
+                                    <br>
+                                    </div>
+                            </div>
+                            <hr>
+                    {% else %}
+                            <div class="options" >
+                                <div style="margin-left:20px;">
+                                    {% if question.passage %}
+                                    <div class="p-2">style="border-style: solid; border-color: green;"
+                                        <p style="color: #212121; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; font-size: 14px; white-space: pre-wrap;word-break: break-all ;">{{question.passage.description}}</p>
+                                        <p style="color: #212121; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; font-size: 14px; white-space: pre-wrap; "><br>Read the question given below and tick the correct option you consider the most appropriate.</p>
+                                    </div>
+                                    {% endif %}
+                                    {% if question.instructions %}
+                                        <div class="">
+                                            <div class="p-2">
+                                        <h5><strong>{{question.instructions}}&nbsp;</strong></h5>
+                                            </div>
+                                        </div>
+                                    {% endif %}
+                                    {% if not question.passage %}
+                                        {% if question.question_id.type == "multiple choice question" %}
+                                        <div class="">
+                                            <div class="p-2">
+                                                <h5><strong>Select the suitable answer out of the options given.&nbsp;</strong></h5>
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    {% endif %}
+
+                                    <span class="font-size16 pd-left15" style="word-break: break-all ;">
+                                        <b>
+                                            {{ forloop.counter }}.{{question.question_title}}
+                                        </b>
+                                    </span>
+                                    <br>
+
+                                    {% if question.image.url %}
+                                     <br>
+                                        <span><img src="{{question.image.url}}" style="height:150px; width:150px;"></span>
+                                    {% endif %}
+
+                                    {% if question.question_id.type == "multiple choice question" or question.question_id.type == "image based MCQ" %}
+                                    <div class="options">
+                                    <div class="pd-left40 pd-bottom5">
+                                        <span>(1)</span> <span style="word-break: break-all ;" {% if question.optionA == question.answer_key %} class="font-bold-green" {% else %}{% endif %}>{{question.optionA}}</span>
+                                    <br>
+                                        <span>(2)</span> <span style="word-break: break-all ;" {% if question.optionB == question.answer_key %} class="font-bold-green" {% else %}{% endif %}>{{question.optionB}}</span>
+                                    <br>
+                                        <span>(3)</span> <span style="word-break: break-all ;" {% if question.optionC == question.answer_key %} class="font-bold-green" {% else %}{% endif %}>{{question.optionC}}</span>
+                                    <br>
+                                        <span>(4)</span> <span style="word-break: break-all ;" {% if question.optionD == question.answer_key %} class="font-bold-green" {% else %}{% endif %}>{{question.optionD}}</span>
+                                    <br>
+
+                                    </div>
+                                    </div>
+                                    {% else %}
+                                    <div class="pd-left15 pd-bottom5">
+                                        {% if question.types == 'typing' %}
+                                        <span class="font-bold pd-left25" style="word-break: break-all ;"> Description :&nbsp; {{question.description}}</span>
+                                        {% elif question.type == 'Excel' %}
+                                        <span class="font-bold pd-left25"style="word-break: break-all ;"> Description :&nbsp; {{question.description}}</span>
+                                        {% else %}
+                                        <span class="font-bold pd-left25"style="word-break: break-all ;">Answer :&nbsp; {{question.answer_key}}</span>
+                                        {% endif %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <hr>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

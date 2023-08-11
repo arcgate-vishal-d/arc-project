@@ -1,0 +1,212 @@
+{% load static %}
+{% include 'candidate_style.html' %}
+
+<style>
+    .parsley-required {
+        margin-right: 230px;
+    }
+
+    .parsley-maxlength {
+        margin-right: 150px;
+    }
+
+    .parsley-type {
+        margin-right: 160px;
+    }
+
+    .parsley-length {
+        margin-right: 160px;
+    }
+
+    .parsley-max {
+        margin-right: 25px;
+    }
+
+    .parsley-pattern {
+        margin-right: 170px;
+    }
+</style>
+<div class="text-center ArcOrange" style="margin-top:-20px;  margin-bottom: -20px;">
+    <img src="{% static 'assets/images/arcgate-image.png' %}" width="125" alt=""
+        title="ArcGate Interview">
+</div>
+<div class="container-fluid">
+    <form action="/candidate_personal_details" method="POST" data-parsley-validate>
+        {% csrf_token %}
+        <div class="factsheet personal-details">
+            <div class="text-center border border-light py-3 px-5">
+                <p class="h4 mb-3" style="margin-top:20px; color:#e3a04d; ;"><u>Personal Details</u></p>
+                <div class="col-md-12 row">
+                    <div class="col-md-6">
+                        <label for="First Name" class="form-label" style="margin-right:290px; margin-top:10px;">First
+                            Name*</label>
+                        <input type="text" class="form-control" id="candidate_first_name" name="first_name" required
+                            data-parsley-maxlength="100"
+                            data-parsley-maxlength-message="This field can have 100 characters"
+                            data-parsley-pattern="^[a-zA-Z ]+$"
+                            data-parsley-pattern-message="This field can have alphabet only"
+                            data-parsley-trigger="keyup">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Last Name" class="form-label" style="margin-right:290px; margin-top:10px;">Last
+                            Name*</label>
+                        <input type="text" class="form-control" id="candidate_last_name" name="last_name" required
+                            data-parsley-maxlength="100"
+                            data-parsley-maxlength-message="This field can have 100 characters"
+                            data-parsley-pattern="^[a-zA-Z ]+$"
+                            data-parsley-pattern-message="This field can have alphabet only"
+                            data-parsley-trigger="keyup">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Email" class="form-label"
+                            style="margin-right:805px; margin-top:20px;">Email*</label>
+                        <input type="email" class="form-control" id="candidate_email" name="email" required
+                            data-parsley-type="email"
+                            data-parsley-pattern="/^([A-Za-z0-9]+[/./-_/+\*])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})$/"
+                            data-parsley-pattern-message="Please enter a valid email">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="DOB" class="form-label" style="margin-right:810px; margin-top:20px;">DOB*</label>
+                        <input type="date" class="form-control" id="candidate_dob" name="dob" required>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h6 class="form-label" style="margin-right:770px; margin-top:20px;">Gender*</h6>
+                        <div style="margin-right:770px;" class="col-md-12 row" style="margin-top:20px;"
+                            data-parsley-multiple="gender">
+                            <div class="col fact-radio">
+                                <input type="radio" id="gender_male" name="gender" value="M" style="margin-right:20px;"
+                                    checked="checked">
+                                <label for="gender_male">Male</label>
+                                <input type="radio" id="gender_female" name="gender" value="F"
+                                    style="margin-right:20px;">
+                                <label for="gender_female">Female</label>
+                                <input type="radio" id="gender_others" name="gender" value="O">
+                                <label for="gender_others">Others</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="candidate_test_level" class="form-label"
+                            style="margin-top:20px; margin-right: 296px;">Test Level*</label>
+                        <select class="form-control" name="test_level" id="candidate_test_level" required>
+                            <option value="">Please select</option>
+                            {% for test_level in test_levels %}
+                            <option value="{{ test_level.id}}">{{test_level.test_level}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="Phone" class="form-label" style="margin-right:295px; margin-top:20px;">Mobile
+                            No.*</label>
+                        <input type="text" class="form-control" id="candidate_mob_1" name="mobile_1" required
+                            data-parsley-type="digits" data-parsley-length="[10,10]" 
+                            data-parsley-length-message="This field can have 10 characters"
+                            data-parsley-trigger="keyup">
+                    </div>
+
+                    <div class="col-md-6">
+                        <label for="Alternative Phone" class="form-label"
+                            style="margin-right:220px; margin-top:20px;">Alternative Mobile No.</label>
+                        <input type="text" class="form-control" id="candidate_alt_mob_2" name="mobile_2"
+                            data-parsley-type="digits" data-parsley-length="[10,10]" 
+                            data-parsley-length-message="This field can have 10 characters"
+                            data-parsley-trigger="keyup">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Present Address" class="form-label"
+                            style="margin-right:251px; margin-top:20px;">Present Address*</label>
+                        <textarea type="text" class="form-control" id="candidate_present_address" name="present_address"
+                            required data-parsley-maxlength="200"
+                            data-parsley-maxlength-message="This field can have 200 characters"
+                            data-parsley-pattern="^[a-zA-Z 0-9.,\n-]+$"
+                            data-parsley-trigger="keyup"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Permanent Address" class="form-label"
+                            style="margin-right:228px; margin-top:20px;">Permanent Address*</label>
+                        <textarea type="text" class="form-control" id="candidate_permanent_address"
+                            name="permanent_address" required data-parsley-maxlength="200"
+                            data-parsley-maxlength-message="This field can have 200 characters"
+                            data-parsley-pattern="^[a-zA-Z 0-9.,\n-]+$"
+                            data-parsley-trigger="onchange"
+                            data-parsley-excluded="[disabled]"></textarea>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Present District" class="form-label"
+                            style="margin-right:260px; margin-top:20px;">Present District*</label>
+                        <input type="text" class="form-control" id="candidate_present_district" name="present_district"
+                            required data-parsley-maxlength="50"
+                            data-parsley-maxlength-message="This field can have 50 characters"
+                            data-parsley-pattern="^[a-zA-Z ]+$"
+                            data-parsley-pattern-message="This field can have alphabet only"
+                            data-parsley-trigger="keyup">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="Permanent District" class="form-label"
+                            style="margin-right:235px; margin-top:20px;">Permanent District*</label>
+                        <input type="text" class="form-control" id="candidate_permanent_district"
+                            name="permanent_district" required data-parsley-maxlength="50"
+                            data-parsley-maxlength-message="This field can have 50 characters"
+                            data-parsley-pattern="^[a-zA-Z ]+$"
+                            data-parsley-pattern-message="This field can have alphabet only"
+                            data-parsley-trigger="onchange"
+                            data-parsley-excluded="[disabled]">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col" style="margin-top:20px; margin-left:-15px;">
+                            <div class="fact-radio">
+                                <input id="chkSameAddress" type="checkbox" name="same_address">
+                                <label for="chkSameAddress">Click, if permanent address is same as present
+                                    address</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <button type="submit" id="pd_next_btn" class="btn btn-primary" style="margin-left:780px;">Next</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+{% include 'candidate_script.html' %}
+<script type="text/javascript" src="{% static 'assets/js/jquery-3.2.1.min.js' %}"></script>
+<script type="text/javascript">
+
+    // same present and permanent address
+
+    $('#chkSameAddress').on('click', function () {
+        var check_address = $('#chkSameAddress')
+        if (check_address.prop('checked') == true) {
+            var same_address = $('#candidate_present_address').val();
+            var same_dist = $('#candidate_present_district').val();
+            $('#candidate_permanent_address').val(same_address);
+            $('#candidate_permanent_district').val(same_dist);
+            $('#candidate_permanent_address').removeClass('parsley-error').addClass('parsley-success');
+            $('#candidate_permanent_address').next().remove()
+            $('#candidate_permanent_district').removeClass('parsley-error').addClass('parsley-success');
+            $('#candidate_permanent_district').next().remove()
+        }
+        else {
+            $('#candidate_permanent_address').val('');
+            $('#candidate_permanent_district').val('');
+        }
+    })
+
+    var todayDate = new Date();
+    todayDate.setDate(todayDate.getDate() - 1)
+    var month = todayDate.getMonth() + 1;
+    var year = todayDate.getUTCFullYear();
+    var tdate = todayDate.getDate();
+    if (month < 10) {
+        month = "0" + month
+    }
+    if (tdate < 10) {
+        tdate = "0" + tdate;
+    }
+    var maxDate = year + "-" + month + "-" + tdate;
+    document.getElementById("candidate_dob").setAttribute("max", maxDate);
+</script>

@@ -1,0 +1,40 @@
+{% load static %}
+<div class="modal fade" id="personal_interview_modal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true" style="left: -31%">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 150%; padding: 4%; left: 32%;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <strong id="modalHeading">ADD PARAMETERS</strong>
+                </h5>
+            </div>
+            <div class="col-md-12">
+                <div class="card custom AddRecord row" style="display: block">
+                    <form action="/candidate_personal_interview/{{candidate.id}}" method="POST" id="demo-form"
+                        data-parsley-validate>
+                        {% csrf_token %}
+                        <input type="hidden" name="method" value="" id="editMethod">
+                        <input type="hidden" id="hiddenID" value="" name="question_id">
+                        <div class="custom" id="IMSQ_form">
+                            <div class="col-md-9 row">
+                                <div class="col-md-9" style="padding: 5%;">
+                                    {{ parameter_form.parameter.label }} {{ parameter_form.parameter }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pull-right">
+                            <button type="button" id="close-button"
+                                class="btn btn-secondary btn-sm waves-effect waves-dark"
+                                data-bs-dismiss="modal">Close</button>
+                            <input id="save-button" type="submit" value="Save"
+                                class="btn btn-primary btn-sm waves-effect waves-dark pull-right"
+                                style="margin-right: 15px">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'assets/js/image.js' %}"></script>

@@ -1,0 +1,33 @@
+ <!-- *****************TYPE 2 Single line**************** -->
+<div class="questions">
+    <div class="">
+        <h3 class="pull-right">{{question.question_id.type}}</h3>
+        <div class="clearfix"></div>
+        <hr class="hr">
+    </div>
+    <table style="width:90%">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="p-2">
+                        <h5 style="word-break: break-all"><strong>{{question.instructions}}:</strong></h5>
+                        <p>&nbsp;</p>
+                    </div>
+                    <div class="mt10">
+                        <span class="bold">{% if ques_number %}{{ques_number}}{% else %}Q{% endif %}.&nbsp;</span>
+                        <span class="bold" style="text-align:initial; word-break: break-all">{{question.question_title}}</span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="heading436">
+        <div class="">
+            <div class="answer-details custom">
+                <div class="input-group">
+                    <textarea id="txtAnswer" name="txtAnswer" type="text" class="form-control AnswerText" style="min-height:160px">{% if attempt_questions %}{% for individual_result_obj,question_obj in attempt_questions.items %}{% if question_obj.question_id == question.question_id %}{{individual_result_obj.candidate_answer|cut:""}}{% endif %}{% endfor %}{% endif %}</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

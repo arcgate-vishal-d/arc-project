@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Arcgate Interview</title>
+    {% include 'login_style.html' %}
+</head>
+<body class="ArcBG">
+    <div class="FlexCenter BgOverlay " style="">
+        <div class="col-md-4 mb-r animated fadeInDown">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center ArcOrange">
+                        <h4 class="Interview">
+                            Admin Login
+                        </h4>
+                         {% include 'elements/messages.html' %}
+                        <hr class="my-4">
+                    </div>
+                    <form method="post" action="/login">
+                       {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" id="login_button" >Log In</button>
+                    </form>
+                </div>
+
+                <!--Footer-->
+            </div>
+        </div>
+    </div>
+    <div class="hiddendiv common"></div>
+{% include 'login_script.html' %}
+</body>
+</html>

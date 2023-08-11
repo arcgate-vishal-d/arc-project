@@ -1,0 +1,51 @@
+{% load static %}
+
+<div class="col-md-12">
+    <!-- add subject modal -->
+    <div class="modal fade" id="exampleModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true" style="left: -31%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 160%;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <strong id="modalHeading"></strong>
+                </div>
+                <div class="col-md-12">
+                    <div class="card custom AddRecord row" style="display: block; margin: 1px">
+                        <form action="subject" method="POST" id="subject_form" data-parsley-validate>
+                            {% csrf_token %}
+                            <input type="hidden" name="method" value="" id="editMethod">
+                            <input type="hidden" id="hiddenID" value="" name="subjectID">
+                            <div class="card-body custom pd0" style="margin: 16px; margin-left: 20px;">
+                                <div id="divMCQ" class="row mt10">
+                                    <div class="col-md-9 mt10">
+                                        <div class="col-md-12">
+                                            {{ add_subject_form.subject.label }} {{ add_subject_form.subject }}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 mb10">
+                                        <div class="pull-left">
+                                            <div class="validation-summary-valid red-text" data-valmsg-summary="true">
+                                                <ul>
+                                                    <li style="display:none"></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="button" id="close-button"
+                                    class="btn btn-secondary btn-sm waves-effect waves-dark pull-right" data-bs-dismiss="modal"
+                                    style="margin-right:6px;margin-bottom: 10px;">Close</button>
+                                <input id="save-button" type="submit" value="Save"
+                                    class="btn btn-primary btn-sm waves-effect waves-dark pull-right" style="margin-left:577px">
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,65 @@
+<div class="modal fade" id="exampleModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true" style="left: -31%">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 200%; padding: 4%">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <strong id="modalHeading"></strong>
+                </h5>
+            </div>
+            <div class="col-md-12">
+                <div class="card custom AddRecord row" style="display: block">
+                    <form action="add_subjective_questions" method="POST" id="demo-form" data-parsley-validate>
+                        {% csrf_token %}
+                        <input type="hidden" name="method" value="" id="editMethod">
+                        <input type="hidden" id="hiddenID" value="" name="subjectquestionsID">
+                        <div class="custom" id="subjectivequestion_form">
+                            <div id="divMCQ" style="padding-top: 24px; padding-bottom: 40px">
+                                <div class="col-md-12 row">
+                                    <div class="col-md-6">
+                                        {{add_subjective_question_form.subjects.label}}
+                                            <span class="field-validation-valid error" data-valmsg-for="SelectedSubject"
+                                                id="select_subject_error" data-valmsg-replace="true"></span>
+                                            {{add_subjective_question_form.subjects}}    
+                                    </div>
+                                     <div class="col-md-6">
+                                        {{add_subjective_question_form.passage.label}}
+                                            <span class="field-validation-valid error" data-valmsg-for="SelectedPassage"
+                                                id="select_passage_error" data-valmsg-replace="true"></span>
+                                                 {{add_subjective_question_form.passage}}
+                                    </div>    
+                                    <div class="col-md-6" style="margin-top:20px;">
+                                        {{ add_subjective_question_form.question_title.label }} {{ add_subjective_question_form.question_title }}
+                                    </div>
+
+                                    <div class="col-md-6" style="margin-top:20px;">
+                                        {{ add_subjective_question_form.answer_key.label }} {{ add_subjective_question_form.answer_key }}
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        {{ add_subjective_question_form.instructions.label }} {{ add_subjective_question_form.instructions }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt10">
+                            <div class="pull-right" style="margin: 5px;">
+                                <button type="button" style="margin-top:20px;" id="close-dialoge" value="close" class="btn btn-secondary btn-sm waves-effect waves-dark pull-right"  data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                            
+                            <div class="pull-right" style="margin: 5px;">
+                                <button type="submit" id="add_question_btn" value="Save"
+                                    class="btn btn-primary btn-sm waves-effect waves-dark pull-right" style="margin-top:20px;" >Save</button>
+                            </div>
+                            <div class="validation-summary-valid red-text" data-valmsg-summary="true">
+                                <ul>
+                                    <li style="display:none"></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

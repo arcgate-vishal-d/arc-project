@@ -1,0 +1,13 @@
+from .admin_users_settings_from import UserSettingsForm, SearchForm
+from .login_form import LoginForm
+from .subject_form import SubjectForm
+from .image_subjective_question_form import ImageSubjectiveQuestionForm, ImgSubjectiveQueSearchForm
+from .multiple_choice_question_form import MultipleChoiceQuestionForm, MCQSearchForm
+from .admin_passage_content_form import PassageContentSearchForm, PassageSettingForm
+from .subjective_question_form import SubjectiveQuestionForm, SearchSubjectiveQuestions
+from .admin_image_mcq_form import ImageMcqSearchForm, ImageMcqSettingForm
+from .paper_setup_forms import GradeForms
+from .admin_excel_question_form import ExcelQuestionForm, ExcelImageForm
+from .multiple_image_choice_que_form import MICQForms, MICQSearchForm
+from .admin_set_todays_paper_form import PaperSearchForm
+from .admin_add_parameter_form import AddParameterForm

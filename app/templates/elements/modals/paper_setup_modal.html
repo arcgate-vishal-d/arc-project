@@ -1,0 +1,179 @@
+{% load static %}
+    <!-- add paper -->
+    {% if not paper_subjects_data %}
+    <div id='add_paper_div' style="display:none;">
+    {% else %}
+    <div id='add_paper_div' style="display:;"></div>
+    {% endif %}
+        <form action="/paper_setup_view" method="POST" id="paper_setup_form" data-parsley-validate>
+            {% csrf_token %}
+            <input type="hidden" name="method" value="" id="editMethod">
+            <input type="hidden" id="hiddenID" value="{{edit_paper_data.id}}" name="paperID">
+            <input type="hidden" id="editData" value="{{subject_data}}" name ="edit_data">
+            <div class="card-body">
+                <div class="row custom Paper-Setting-Control-Panel px-3">
+                    <div class="col-md-4">
+                        <label>Please Select Department</label>
+                        <div class="input-group">
+                            <select class="form-control" id="Department"
+                                name="SelectedDepartmentID" style="padding:2px;" data-parsley-required="true">
+                                {% if edit_paper_data %} <option value="{{edit_paper_data.department}}">{{edit_paper_data.department}} </option>{% endif %}
+                                <option value="">Please select Department</option>
+                                <option value="KPO">KPO</option>
+                                <option value="SOFTWARE">SOFTWARE</option>
+                                <option value="SOFTWARE">ADMIN</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <label style="padding:2px;">Please Select Test Level</label>
+                        <div class="input-group">
+                            <select class="form-control" id="test_level_id" name ="test_level_id" data-parsley-required="true" style="padding:0px;">
+                               {% if edit_paper_data %} <option value="{{edit_paper_data.test_level.id}}">{{edit_paper_data.test_level}}</option>{% endif %}
+                                <option value="">Please Select Test level---</option>
+                                {% for test_level in test_levels %}
+                                <option value="{{ test_level.id }}" id="list{{ test_level.id }}">{{ test_level.test_level}}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <label>Name of Test Paper </label>
+                        <div class="input-group">
+                            <input class="form-control text-box single-line" id="PaperSetName" name="PaperSetName"
+                                placeholder="Name of Test Paper" type="text" value="{{edit_paper_data.paper_title}}" data-parsley-required="true">
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-4">
+                        <label>Description of Test Paper</label>
+                        <div class="input-group">
+                            <textarea class="form-control text-box multi-line" id="Descriptions" name="Descriptions"
+                                placeholder="Description of Test Paper" data-parsley-required="true" >{{ edit_paper_data.paper_description}} </textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-bottom10 mt-top10">
+                    <div class="row card-header">
+                        <div class="col-md-6">
+                            <h4 class="font-size18 mt-bottom0">Set Required type of questions:</h4>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="float-right col-md-4 mt-rightminus24"><span id="lblTotalMarks"><label
+                                        class="flt-left label-custom active">Total Marks : </label> <input
+                                        class="form-control marks-box text-box single-line" data-val="true"
+                                        data-val-number="The field TotalMarks must be a number."
+                                        data-val-required="The TotalMarks field is required." id="txtMarks"
+                                      name="TotalMarks" readonly="readonly" type="text" value="{{edit_paper_data.paper_marks}}"></span>
+                            </div>  
+                            <div class="float-right col-md-4 mt-rightminus24"><span id="lblTotalTime"><label
+                                class="flt-left label-custom active">Total Time : </label> <input
+                                class="form-control marks-box text-box single-line" data-val="true"
+                                data-val-number="The field TotalTime must be a number."
+                                data-val-required="The TotalTime field is required." id="txtTime"
+                              name="TotalTime" readonly="readonly" type="text" 
+                             value="{{edit_paper_data.paper_time}}"></span>
+                            </div>         
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt10" id="paper_subject_add">
+                    <div class="col-md-12">
+                        <div class="temp" style="">
+                            <div class="CPRow row mdb-color darken-3 text-white">
+                                <div class="col-md-6">
+                                    Subject
+                                </div>
+                                <div class="col-md-1 text-center">
+                                    Select
+                                </div>
+                                <div class="col-md-1">
+                                     Required Questions?
+                                </div>
+                                <div class="col-md-1">
+                                    Total Marks
+                                </div>
+                                <div class="col-md-1">
+                                    Total Time
+                                    <br>(in minutes)
+                                </div>
+                                <div class="col-md-1">
+                                    Order
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        
+                        <div class="temp" style="">
+                            {% for subject in subject_data %}
+                            
+                            <div class="CPRow row custom">
+                                <div class="hidden" id="{{subject.id}}" name="{{subject.id}}"></div>
+                                <div class="col-md-6">
+                                    <p id="subject_{{ subject.id }}" value="subject_title_{{ subject.id }}"readonly="readonly" >{{ subject.subject }}
+                                    </p>
+                                </div>
+                                <div class="col-md-1">
+                                    <div class=" text-center">
+                                        <input id="subject_chk_{{ subject.id }}"
+                                            name="subject_chk" type="checkbox"
+                                            readonly="readonly" onchange=checkBox() value="{{edit_paper_data.id}},{{subject.id}}" {% for edit_subject_data in paper_subjects_data %}
+                                            {% if subject.id == edit_subject_data.subject.id %} checked="checked"{% endif %}{% endfor %}>
+                                            <input name="subject_title_{{ subject.id }}" id="subject_title_{{ subject.id }}" type="hidden"  value="{{ subject.id }}"
+                                            >
+                                    </div>
+                                </div>
+
+                                <div class="col-md-1">
+                                    <input htmlattributes="{ class = form-control }" id="subject_questions_{{ subject.id }}"
+                                    name="subject_questions_{{ subject.id }}" placeholder="Question Quantity" type="text"
+                                     readonly="readonly" data-parsley-range="[1, 50]" data-parsley-range-message="Questions should be in range 1 to 50"
+                                     data-parsley-type="digits"
+                                     {% for edit_subject_data in paper_subjects_data %}
+                                     {% if subject.id == edit_subject_data.subject.id %}  value="{{ edit_subject_data.subject_questions }}"{% endif %}{% endfor %} >
+                                </div>
+
+                                <div class="col-md-1">
+                                    <input htmlattributes="{ class = form-control }" class ="totalMarks" id="subject_marks_{{ subject.id }}" 
+                                     name="subject_marks_{{ subject.id }}"  placeholder="Total Marks" type="text" readonly="readonly" onkeyup=FtotalMarks()
+                                     data-parsley-range="[1, 500]" data-parsley-range-message="Marks should be in range 1-500" data-parsley-type="digits"
+                                     {% for edit_subject_data in paper_subjects_data %}
+                                      {% if subject.id == edit_subject_data.subject.id %} 
+                                      value="{{ edit_subject_data.subject_marks }}" {% endif %}{% endfor %}>
+                                </div>
+                                <div class="col-md-1">
+                                    <input htmlattributes="{ class = form-control }" class ="totalTime" id="subject_time_{{ subject.id }}"
+                                    name="subject_time_{{ subject.id }}" placeholder="Subject time" type="text"
+                                     readonly="readonly" onkeyup=FtotalTime()
+                                      data-parsley-range="[1, 500]" data-parsley-range-message="Enter time in minutes"  data-parsley-type="digits"
+                                      {% for edit_subject_data in paper_subjects_data %}
+                                      {% if subject.id == edit_subject_data.subject.id %} 
+                                      value="{{ edit_subject_data.subject_time }}" {% endif %} {% endfor %}>
+                                </div>
+                                <div class="col-md-1">
+                                    <input htmlattributes="{ class = form-control }" id="subject_order_{{ subject.id }}"
+                                    name="subject_order_{{ subject.id }}" placeholder="Subject Order" type="text" readonly="readonly" onchange="orderNumber(this)"
+                                    data-parsley-range="[1, 50]" data-parsley-range-message="Order can't be zero or above 50" data-parsley-type="digits"
+                                    
+                                     {% for edit_subject_data in paper_subjects_data %}
+                                     {% if subject.id == edit_subject_data.subject.id %} value="{{ edit_subject_data.subject_order }}" {% endif %} {% endfor %}  >
+                                </div>
+                            </div>
+                        {% endfor %}
+                        
+                        </div>
+                    </div>
+                </div>
+                    <div class="pull-right">
+                        <div class="waves-input-wrapper waves-effect waves-light">
+                                <button id="btnNext" class="btn btn-primary btn-sm mt-btn-save" type="submit">Next</button>
+                        </div>
+                    </div>
+            </div>
+        </form>
+    </div>

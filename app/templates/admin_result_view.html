@@ -1,0 +1,245 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+
+<body>
+    <div class="container-fluid mt80">
+        <form action="/admin_view_result" method="GET">
+            {% csrf_token %}
+            <h5>Exam Results</h5>
+            {% if request.user.is_staff %}
+            <div class="ControlPanel col-md-12 custom">
+
+                <div class="card row">
+                    <div class="card-body">
+                        <div class="form-inline">
+                            <div class="col fact-radio col-md-2 mt10 " style="max-width: 13%;">
+                                    <input id="txtFromDate" type="date" class="form-control" name="from_date"value="{{from_date}}">
+                               
+                            </div>
+                            <div class="col fact-radio col-md-2 mt10 " style="max-width: 13%;">
+                                    <input id="txtToDate" type="date" class="form-control" name="to_date"value="{{to_date}}">
+                            </div>
+                            <div class="col-md-3 mt10">
+                                <div class="input-group">
+                                    <select class="form-control" id="ddlTeamLeads" name="team_lead">
+                                        <option value="">Please Select Team Lead</option>
+                                        {% for team_lead in interviewer %}
+                                        <option style="word-break: break-all;" value="{{team_lead.id}}" {% if team_lead.id|slugify == tl|slugify %}selected{% endif %}>{{ team_lead.username }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3 mt10 ">
+                                <div class="input-group" style="margin-left:23px;">
+                                    <button type="submit" id="btnSearch" value="Search"
+                                        class="btn btn-sm btn-primary waves-effect waves-light">Search</button>
+                                </div>
+                            </div>
+                            <div id="progress" style="display: none;">
+                                <img src="{% static 'assets/images/sm-loading.gif' %} ">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </form>
+        <form action="admin_view_result" method="POST">
+            {% csrf_token %}
+            <div class="ControlPanel col-md-12 custom">
+                <div class="card row">
+                    {% if request.user.is_staff %}
+                    {% if not tl %}
+                    <div class="card-body" style="margin-bottom: -4%;">
+                        <div class="form-inline">
+                            <div class="col-md-3 mt10">
+                                <div class="input-group">
+                                    <select class="form-control" id="ddlTeamLeads" name="SelectedTeamLeadID">
+                                        <option value="">Please Select Team Lead</option>
+                                        {% for team_lead in interviewer %}
+                                        <option value="{{team_lead.id}}">{{ team_lead.username }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3 mt10 ">
+                                <div class="input-group" style="margin-left:23px;">
+                                    <button id="btnExport" value="Export"
+                                        class="btn btn-secondary btn-sm mt-left10 waves-effect waves-light">Export</button>
+                                </div>
+                            </div>
+                            <div id="progress" style="display: none;">
+                                <img src="{% static 'assets/images/sm-loading.gif' %} ">
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <div>
+                {% include 'elements/messages.html' %}
+                <div id="searchResult">
+                    <table class="table table-sm table-bordered table-hover mt20 vertical">
+                        <thead class="mdb-color darken-3 white-text">
+                            <tr>
+                                <th>
+                                    <div>Name</div>
+                                </th>
+                                <th>
+                                    <div>Mobile</div>
+                                </th>
+                                <th>
+                                    <div>View Detail</div>
+                                </th>
+                                <th>
+                                    <div>Check Answer</div>
+                                </th>
+                                <th>
+                                    <div>Fact Sheet</div>
+                                </th>
+                                {% if request.user.is_staff %}
+                                <th>
+                                    <div>{% if tl %}Delete{% else %}Forward{% endif %}</div>
+                                </th>
+                                {% endif %}
+                                <th>
+                                    <div>Personal Interview</div>
+                                </th>
+                                <th>
+                                    <div>ArcCrm Update</div>
+                                </th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for candidate in candidates_details %}
+
+                            <tr class="candidate_details" id="candidate_id_{{ candidate.id }}">
+                                <td>{{ candidate.first_name }} {{ candidate.last_name }}</td>
+                                <td>{{ candidate.mobile_no_1 }}</td>
+                                <td><a href="" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                        id="modalOpen">Detail</a></td>
+                                <td><a id="aviewresults" href='/individual_result/{{candidate.id}}'>Answer</a> </td>
+                                <td><a id="aviewFactSheet"
+                                        href="/candidate_fact_sheet?cid={{ candidate.id }}&download=true">Print</a>
+                                </td>
+                                {% if request.user.is_staff %}
+                                <td>{% if tl %}
+                                    <form method="POST" action="">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="candidate_id" value="{{candidate.id}}">
+                                        <input type="hidden" name="method" value="delete">
+                                        <input type="hidden" name="teamlead" value="{{tl}}">
+                                        <button type="submit" class=" btn btn-danger btn-sm"
+                                            style="margin: 5px;">delete</button>
+                                    </form>
+                                    {% else %}
+                                    <input class="1form-control" id="chk_{{candidate.id}}" type="checkbox"
+                                        value="{{ candidate.id }}" name="forwarded_candidate">
+                                    <input type="hidden" value="{{ candidate.id }}" name="candidate_id">
+                                    {% endif %}
+                                </td>
+                                {% endif %}
+                                <td><a id="aviewPIResults"
+                                        href="/candidate_personal_interview/{{candidate.id}}">Results</a>
+                                </td>
+                                <td>
+                                    <input class="1form-control" id="chkAU1" type="checkbox" valueExport="true">
+                                    <input type="hidden" value="false">
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+    </div>
+    <footer class="footer">
+        <div class="container-fluid">
+            <span class="text-muted">Footer content here.</span>
+        </div>
+    </footer>
+
+    {% include 'admin_script.html' %}
+    {% include 'elements/modals/admin_view_results_modal.html' %}
+    {% include 'elements/pagination.html' %}
+
+
+    <div class="hiddendiv common"></div>
+    <script>
+        $('.candidate_details').on('click', function (e) {
+            var row_id = e.currentTarget.id.slice(13,)
+            $('#hiddenID').val(row_id)
+
+            $.ajax({
+                url: '/admin_result_details',
+                type: 'GET',
+                data: {
+                    row_id: row_id
+                }
+            })
+                .done(function (response) {
+                    $('#demo').html('<tr id="demorow" style="display: none;"><td style="width:20%; background: cadetblue;">  </td><td>  </td><td>  </td></tr>')
+
+
+                    if (Object.keys(response[0]).length > 0) {
+                        var row = $("#demo tr:last-child").clone(true);
+                        var counter = 0
+                        for (let i in response[0]) {
+                            counter += 1
+                            row = $("#demo tr:last-child").removeAttr("style");
+                            if (counter > 0) {
+                                row = $("#demo tr:last-child").clone(true);
+                            }
+                            var item = i;
+                            var grade = null
+                            for (let gid = 0; gid < response[1].length; gid++) {
+                                var title = (response[1][gid]['title']);
+                                var from = (Number(response[1][gid]['from']));
+                                var to = (Number(response[1][gid]['to']));
+
+                                if (response[0][item]
+                                    >= from && response[0][item] <= to) {
+                                    grade = response[1][gid]['title']
+                                    AppendRow(row, item, counter, response, grade);
+                                }
+                            }
+
+                        }
+                    }
+                })
+        })
+
+        function AppendRow(row, responseVal, index, response, grade) {
+            $(row).attr("id", "idd");
+            $("td", row).eq(0).html(responseVal);
+            $("td", row).eq(1).html(grade);
+            $("td", row).eq(2).html(response[0][responseVal] + '%');
+            $("#demo").append(row);
+            $('#demorow').remove();
+        }
+
+        var checkbox = []
+        $('.candidate_details').click(function (e) {
+            row = e.currentTarget.id
+            row_id = row.slice(13,)
+            if ($('#chk_' + row_id).is(':checked')) {
+                checkbox.push(row_id)
+            }
+            else {
+
+                if (checkbox.includes(row_id)) {
+                    checkbox.splice(checkbox.indexOf(row_id), 1);
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

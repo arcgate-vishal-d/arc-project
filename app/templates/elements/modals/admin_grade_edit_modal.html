@@ -1,0 +1,72 @@
+<style type="text/css">
+    #grade_setup .form-inline .parsley-errors-list {
+        position: absolute;
+        bottom: -25px;
+        left: 0%;
+    }
+</style>
+<form id="grade_setup" data-parsley-validate action="/paper_setup_request" method="post">
+    {% csrf_token %}
+    <input type="hidden" name="method" value="">
+    <div class="form-inline" style="padding-bottom: 1%;">
+        <div class="col-md-3">
+            <div class="input-group mt10" id="grades_from_label">{{ grade_form.from_field.label }}</div>
+            <div class="input-group mt10">{{ grade_form.from_field }}</div>
+            <span id="grade_formate_from_error"></span>
+        </div>
+        <div class="col-md-3">
+            <div class="input-group mt10" id="grades_to_label">{{ grade_form.to_field.label }}</div>
+            <div class="input-group mt10">{{ grade_form.to_field }}</div>
+            <span id="grade_formate_to_error"></span>
+        </div>
+
+        <div class="col-md-3 mb10" style="padding-top: 0.5%">
+            <div class="input-group mt10" id="grades_title_label">{{ grade_form.grade.label }} </div>
+            <div class="input-group mt10">{{ grade_form.grade }}</div>
+            <span id="grade_formate_title_error"></span>
+        </div>
+
+        <div class="col-md-3 mb10" style="padding-top: 2.35%; padding-right: 15%;">
+            <div class="input-group mt10 pull-right">
+                <button id="save-button" value="Save Grade"
+                    class="btn btn-primary btn-sm waves-effect waves-dark pull-right">Save grade</button>
+                <span id="errorSpan" class="red-text"></span>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="px-3" style="padding-top:1%">
+    <table id="tblQuestionsByType" class="table col-md-12" cellpadding="0" cellspacing="0">
+        <thead class="mdb-color darken-3">
+            <tr class="text-white">
+                <th>Range From(%)</th>
+                <th>Range To(%)</th>
+                <th>Grade</th>
+                <th>Action</th>
+                <th>&nbsp;</th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+
+        <tbody id="demo">
+            {% for grades in grade_data %}
+            <tr id="row_{{ grades.id }}">
+                <td>{{ grades.grade_from }}</td>
+                <td>{{ grades.grade_to }}</td>
+                <td>{{ grades.title }}</td>
+                <td class="wdth80">
+                    <form action="/paper_setup_request" method="POST"
+                        onSubmit="return confirm('Do you want to delete this question?')">
+                        {% csrf_token %}
+                        <input type="hidden" name="method" value="delete"></input>
+                        <input type="hidden" value="{{grades.id}}" name="grade_id">
+                        <button class="Delete btn btn-danger btn-sm waves-effect waves-light" type="submit" id="Delete"
+                            href="/paper_setup_request" style="left:-25% ;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

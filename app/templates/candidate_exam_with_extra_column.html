@@ -1,0 +1,121 @@
+{% load static %}
+{% include 'candidate_style.html' %}
+<body>
+<style type="text/css">
+    .a .img-fix-size {
+        height: 75px;
+        width: 100px;
+        margin: 2%;
+    }
+  #without_bullet li {
+    text-overflow: ellipsis;
+    margin-top: -10px;
+    overflow: hiddpxen;
+    white-space: nowrap;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;  
+      overflow: hidden;
+    }
+</style>
+
+<div class="container-fluid">
+
+    {% for subject,question in dict.items %}
+                {% for question_obj in question %}
+                    {% if question_obj.question_id not in atmpt %}
+                        {% if non_internet_questions == number_of_attempted_question %}
+                        <div style="padding-top: 1%; width: 86%; padding-left: 5%;"><h3 style="float: left;">&nbsp;NOTE:&nbsp;</h3><h5 style="padding-top: 5px; background-color:rgba(255, 153, 153,0.4);"><b>If you want to re-analyse your attempted and skipped question you can do it from here only. Once you answer this question you'll not be able to edit.</b></h5></div>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+    <div id="divClock" class="circle ui-draggable ui-draggable-handle">
+        <h3>
+            <span id="timer"></span>
+        </h3>
+    </div>
+
+    <div id="searchResult">
+        <div class="test-paper-main" {% if non_internet_questions == number_of_attempted_question %} style="margin-top: 5%;"{% endif %}>
+            <div class="row">
+                <div class="col-2 text-center" style="border: solid 1px; max-height: 625px;overflow-y:auto;">
+                <ul>
+                   <li style="color: green; background-color: rgba(170, 255, 128,0.4); ">Attempted</li>
+                   <li style="color: red; background-color: rgba(255, 153, 153,0.4); ">Skipped</li> 
+                </ul>
+                <hr>
+                {% if attempt_questions %}
+                <ul  class="text-left" style="list-style-type: none;" id="without_bullet">
+                    {% for candidate_ans,question_Obj in attempt_questions.items %}
+                    <form action="/exam" method="GET">
+                    <input type="hidden" name="uid" value="{{question_Obj.question_id.id}}">
+                    <input  class="timeee" type="hidden"  name="hdnDurationget" value="">
+                    <input type="hidden" value="{{forloop.counter}}" name="ques_num">
+                    <li {% if candidate_ans.candidate_answer == '' %} style="background-color: rgba(255, 153, 153,0.4);" {% else %} style="background-color: rgba(170, 255, 128,0.4);" 
+                    {% endif %} onclick="anchorTagSubmit(this)">{{forloop.counter}}. <a href="#" style="color: #000000 word-break: break-all ;">{{question_Obj.question_title}}</a></li>
+                    </form>
+
+                    {% endfor %}
+                {% endif %}
+                </ul></div>
+                
+            <div class="col-10">
+            <form action="/exam" method="POST" {% for subject,question in dict.items %}
+            {% for question_obj in question %}
+                {% if question_obj.question_id not in atmpt %}
+                {% if non_internet_questions == number_of_attempted_question %} onsubmit="return confirm('If you proceed, You\'ll not be able to review your skipped and attempted questions. Do you still want to proceed?');" {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endfor %} onsubmit="btnnext.disabled = true;">
+           {% csrf_token %}
+           <input type="hidden" id="hdnDuration" name="hdnDuration" value="{{timer}}">
+            {% for subject,questions in dict.items %}
+                {% for question in questions %}
+                <input id="candidate_paper_id" name = "candidate_paper_id" type="hidden" value = "{{candidate_paper_id}}">
+                <input id="selectedQuestionID" name="selectedQuestionID" type="hidden" value="{{question.question_id.id}}">
+                <input id="QuestionType" name="QuestionType" type="hidden" value="{{question.question_id.type}}">
+                <input id="sheet_id" name="sheet_id" type="hidden" value="{{sheet_id}}">
+                    {% for relevent_subject,remaining_question in attempt.items %}
+                        {% if relevent_subject.subject == subject.subject %}
+                             <h3 style="width:fit-content; margin-left: 5%;">{{subject.subject}}({{remaining_question|add:'1'}}/{{subject.subject_questions}})</h3>
+                        {% endif %}
+                    {% endfor %}
+                    <hr>
+                        <!-- multiple choice question -->
+                        {% if question.question_id.type == 'multiple choice question' %}
+                           {% include 'candidate_question_type/candidate_mcq_type.html' %}
+                       
+                           <!-- image based multiple choice question -->
+                        {% elif question.question_id.type == 'image based MCQ' %}
+                           {% include 'candidate_question_type/candidate_img_mcq_type.html' %}
+                          
+                           <!-- subjective question -->
+                        {% elif question.question_id.type == 'subjective question' %}
+                           {% include 'candidate_question_type/candidate_subjectice_type.html' %}
+                           
+                           <!-- image based subjective question -->
+                        {% elif question.question_id.type == 'Image based subjective question' %}
+                           {% include 'candidate_question_type/candidate_img_subjective_type.html' %}
+                           
+                           <!-- multi image choice question -->
+                        {% elif question.question_id.type == 'Multiple Image Choice Question' %}
+                           {% include 'candidate_question_type/candidate_micq_type.html' %}
+                        {% endif %}
+                        <div class="pull-right">
+                            <button style="margin-right: 120%; width: 150%;" type="submit" id="btnnext" value="submit"  class="btn btn-primary pull-right AddRecordBtn blue-text" {%if question.question_id.type == 'Passage/Instruction' %} onclick="nextTyping()" {% endif %} onclick="updateDuration()">Next</button>
+                        </div> &nbsp; &nbsp;
+                        <hr>
+                {% endfor %}
+            {% endfor %}
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+
+{% include 'candidate_script.html' %}
+<script language="JavaScript" type="text/javascript" src="{% static 'assets/js/exam.js' %}"></script>
+<script language="JavaScript" type="text/javascript" src="{% static 'assets/js/extra_column_exam.js' %}"></script>
+</body>
+</html>

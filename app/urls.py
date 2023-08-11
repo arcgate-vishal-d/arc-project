@@ -1,0 +1,61 @@
+from django.contrib import admin
+from django.urls import path
+from django.conf.urls.static import static
+from django.conf import settings
+from app import views
+
+urlpatterns = [
+     path('admin/', admin.site.urls),
+     path('', views.InterviewHomePage.as_view()),
+     path('login', views.Login.as_view()),
+     path('logout', views.Logout.as_view()),
+     path('dashboard', views.Dashboard.as_view()),
+     path('admin_user/', views.AdminUser.as_view()),
+     path('user_setting_view', views.UserSettingsView.as_view()),
+     path('subject', views.SubjectView.as_view()),
+     path('passage_content', views.PassageContentView.as_view()),
+     path('passage_view', views.PassageContentPOSTView.as_view()),
+     path('mulitple_choice_question', views.MultiPleChoiceQuestion.as_view()),
+     path('MCQ_views', views.MCQViews.as_view()),
+     path('excel_question', views.ExcelQuestion.as_view()),
+     path('img_subjective', views.ImageSubjectiveQuestionView.as_view()),
+     path('img_sub_request', views.IBSQViews.as_view()),
+     path('subjective_questions', views.SubjectiveQuestionsView.as_view()),
+     path('add_subjective_questions', views.AddSubjectiveQuestionsView.as_view()),
+     path('admin_image_mcq', views.ImageBasedMcqView.as_view()),
+     path('image_mcq_post', views.ImageBasedMcqPostView.as_view()),
+     path('paper_setup', views.PaperSetup.as_view()),
+     path("paper_setup_request", views.PaperSetupRequestView.as_view()),
+     path("paper_setup_details/paper/<int:id>",
+          views.PaperSetupDetails.as_view()),
+     path("paper_setup_view", views.PaperSetupPost.as_view()),
+
+     path('multiple_img_choice_que',
+          views.MultipleImageChoiceQuestionGetView.as_view()),
+     path('multiple_imag_choice_que_request',
+          views.MultipleImageChoiceQuestionPostView.as_view()),
+     path('candidate_personal_details', views.CandidatePersonalView.as_view()),
+     path('candidate_education_details',
+         views.CandidateEducationalDetailView.as_view()),
+     path('candidate_family_details', views.CandidateFamilyDetailView.as_view()),
+     path('candidate_work_experience',
+         views.CandidateWorkExperienceDetailView.as_view()),
+     path('candidate_source_of_info',
+         views.CandidateSourceOfInformationView.as_view()),
+     path('candidate_other_details', views.CandidateOtherDetailView.as_view()),
+     path('interview_homepage', views.InterviewHomePage.as_view()),
+
+     path("view_paper_set/<int:paper_id>", views.ViewFullPaperSet.as_view()),
+     path("set_today_paper", views.SetTodaysPaper.as_view()),
+     path('admin_view_result', views.AdminViewResult.as_view()),
+     path('admin_result_details', views.AdminViewResultDetails.as_view()),
+     path('individual_result/<int:candidate_id>', views.AdminIndividualResult.as_view()),
+     path('candidate_fact_sheet', views.CandidateFactSheet.as_view()),
+     path('candidate_personal_interview/<int:candidate_id>', views.AdminResultPersonalInterview.as_view()),
+     path('exam', views.CandidateExam.as_view()),
+     path('thank_you', views.CandidateThankYou.as_view()),
+     path('exam_start', views.ExamStartView.as_view()),
+     path("reset_test", views.ResetTest.as_view()),
+     path("time_out", views.CandidateTimeOut.as_view()),
+
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

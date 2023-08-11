@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    {% include 'admin_style.html' %}
+    <title>Arcgate Interview</title>
+</head>
+
+ <nav class="navbar navbar-expand-lg navbar-dark fixed-top scrolling-navbar" style="background-color: #F05833;">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/">
+                <img src="{% static 'assets/images/ArcInterviewlogo.png' %}" width="200">
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent-7"
+                aria-controls="navbarSupportedContent-7" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent-7">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link waves-effect waves-ligh" href="/dashboard">Dashboard</a>
+                    </li>
+                </ul>
+                <div class="form-inline">
+                    <span class="white-text font-size12">{{request.user}}</span>
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item">
+                            <a href="" name="sign_out" class="nav-link waves-effect waves-light sign_out">
+                                <i class="fa fa-sign-out" aria-hidden="true"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>

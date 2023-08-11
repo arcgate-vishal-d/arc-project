@@ -1,0 +1,107 @@
+{% load static %}
+{% include 'candidate_style.html' %}
+
+
+<body>
+    <div class="text-center ArcOrange" style="margin-top:-20px;  margin-bottom: -20px;">
+        <img src="{% static 'assets/images/arcgate-image.png' %}" width="125" alt=""
+            title="ArcGate Interview">
+    </div>
+    <div class="container-fluid">
+        <div id="searchResult">
+            <div class="container-fluid">
+                <form action="/candidate_other_details" method="post" data-parsley-validate id="other_form" onsubmit="return confirm('Are you sure? Check details before starting the exam.');">
+                    {% csrf_token %}
+                    <div class="factsheet other-details animated" style="margin-top:60px;">
+                        <div class="text-center border border-light p-5">
+                            <p class="h4 mb-5" style="color:#e3a04d;"><u>Other Details</u></p>
+                            <div>
+                                <div class="form-row mb-4">
+                                    <div class="col fact-radio">
+                                        <h5>Are you willing for 1 Year Service Commitment?</h5>
+                                        <input checked="True" class="form-control" id="candidate_service_Commitment_yes"
+                                            name="service_commitment" readonly="True" type="radio" value=1>
+                                        <label for="candidate_service_Commitment_yes">Yes</label>
+                                    </div>
+                                </div>
+                                <div class="form-row mb-4">
+                                    <div class="col fact-radio">
+                                        <h5>Do you agree for 1 month salary as security deposit?</h5>
+                                        <input checked="True" class="form-control" id="candidate_salary_deposit_agreed"
+                                            name="salary_deposit" readonly="True" type="radio" value=1>
+                                        <label for="candidate_salary_deposit_agreed">Yes</label>
+                                    </div>
+                                </div>
+                                <div class="form-row mb-4">
+                                    <div class="col fact-radio">
+                                        <h5>What is your preferred shift time for work at Arcgate?</h5>
+                                        <input class="form-control" checked="True" id="candidate_shift_day" name="shift"
+                                            type="radio" value="D">
+                                        <label for="candidate_shift_day">Day</label>
+                                        <input class="form-control" id="candidate_shift_night" name="shift" type="radio"
+                                            value="N">
+                                        <label for="candidate_shift_night">Night</label>
+                                        <input class="form-control" id="candidate_shift_any" name="shift" type="radio"
+                                            value="A">
+                                        <label for="candidate_shift_any">Any</label>
+                                    </div>
+                                </div>
+                                <div class="form-row mb-4">
+                                    <div class="col fact-radio col-md-6">
+                                        <h5>On selection, please mention the expected joining date.</h5>
+                                        <input class="form-control " id="candidate_expected_joining_date"
+                                            name="expected_joining_date" type="date" max="9999-12-31" required>
+                                    </div>
+                                </div>
+                                <div class="form-row mb-4">
+                                    <div class="col fact-radio col-md-6">
+                                        <h5>On selection, please mention the expected salary</h5>
+                                        <input class="form-control " id="candidate_salary_expected"
+                                            name="salary_expected" type="text" value="" required
+                                            data-parsley-type="digits"
+                                            data-parsley-maxlength="12"
+                                            data-parsley-maxlength-message="This field can have 12 characters"
+                                            data-parsley-trigger="keyup">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-row mb-4">
+                                <div class="col text-right">
+                                    <button type="submit"
+                                        class="btn btn-primary btn-sm waves-effect waves-dark pull-right" name="action"
+                                        style="margin-right: 2%; width: 10%;">Start Test</button>
+                                    <a href="/candidate_source_of_info" id="btnPrevious"
+                                        class="btn btn-primary btn-sm waves-effect waves-dark pull-right" name="action"
+                                        style="margin-right: 2%; width: 10%;">Previous</a>
+                                </div>
+                            </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+{% include 'candidate_script.html' %}
+
+<script>
+
+    $('#btnPrevious').click(function () {
+        $('#other_form').parsley().destroy();
+        parent.history.back()
+        return false
+    })
+
+    $(function () {
+        var dtToday = new Date();
+        var month = dtToday.getMonth() + 1;
+        var day = dtToday.getDate();
+        var year = dtToday.getUTCFullYear();
+
+        if (month < 10)
+            month = '0' + month.toString();
+        if (day < 10)
+            day = '0' + day.toString();
+        var minDate = year + '-' + month + '-' + day;
+        $('#candidate_expected_joining_date').attr('min', minDate);
+    });
+</script>

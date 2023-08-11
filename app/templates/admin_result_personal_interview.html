@@ -1,0 +1,167 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+
+<body>
+    <div class="container-fluid mt80">
+        <h5>Candidate Name: <strong>{{candidate.first_name}} &nbsp;{{candidate.last_name}} </strong></h5>
+        <div class="custom">
+            <div class="card">
+                <div class="card-header">
+                    <span class="pull-right" style="margin: 1%;">
+                        <button class="btn btn-primary  AddRecordBtn blue-text" id="addButton"
+                            style="border-radius: 55px; left: -1%; margin-top: -8%;" onclick="clear_validation()"
+                            type="button" data-bs-toggle="modal" data-bs-target="#personal_interview_modal">Add
+                            Parameter</button>
+                        </span>
+                    <span class="pull-left AddRecordBtn blue-text">Add / Remove Interview Parameter</span>
+                </div>
+            </div>
+        </div>
+        {% include "elements/messages.html" %}
+        <div class="col-md-12">
+            <!--Panel-->
+            <div class="card row AddRecord mb10" style="display: block;">
+                <div class="col-md-6 p-3">
+                    <h5>Select Parameters for Personal Interview</h5>
+                    <table class="table table-sm table-bordered table-hover mb-2">
+                        <thead class="mdb-color darken-3 white-text">
+                            <tr>
+                                <th style="width:50px;" class="text-center">#</th>
+                                <th style="text-align: center;">Parameter</th>
+                                <th style="text-align: center;">Select</th>
+                                <th style="text-align: center;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for parameter in parameters %}
+                            <tr>
+                                <td align="center">{{forloop.counter}}</td>
+                                <td>{{ parameter }}</td>
+                                <td>
+                                    <input class="form-control" id="chkPI" name="chkPI_{{parameter.id}}" type="checkbox"
+                                        value="{{parameter}}" {% if parameter.id < 1 %} checked {% endif %}>
+                                    <input name="GetInterviewParameters[0].IsSelected" type="hidden" value="false">
+                                </td>
+                                <td style="text-align: center;">
+                                    <span style="display: inline-block;">
+                                        <form method="POST" action="/candidate_personal_interview/{{candidate.id}}"
+                                            onSubmit="return confirm('Do you want to delete this parameter ?')">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="method" value="delete">
+                                            <input type="hidden" value="{{parameter.id}}" name="parameter_id">
+                                            <button type='submit' class=" btn btn-danger btn-sm"
+                                                style="margin: 5px;">Delete</button>
+                                        </form>
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                
+            </div>
+        </div>
+
+        <div class="col-md-12 mt-3">
+            <form method="POST" action="/candidate_personal_interview/{{ candidate.id }}" id="parameter_form">
+                {% csrf_token %}
+                <div class="card row p-2">
+                    <table class="table table-sm table-bordered table-hover m-0">
+                        <thead class="mdb-color darken-3 white-text">
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Interviewer Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="parameter_table">
+                            <tr>
+                                <td id="parameter" name="parameter">
+                                    <span>PARAMETER</span>
+                                </td>
+                                
+                                <td>
+                                    <div class="">
+                                        <span>
+                                            <input type="radio" id="good" name="score" value="Good">
+                                            <label for="Good">Good</label>
+
+                                            <input type="radio" id="average" name="score" value="Average">
+                                            <label for="Average">Average</label>
+
+                                            <input type="radio" id="below_average" name="score" value="Below Average">
+                                            <label for="BelowAverage">Below Average</label>
+                                        </span>
+                                    </div>
+                                </td>
+                                
+                            </tr>
+                        </tbody>
+                        <td id="remark">
+                            <span>Remark</span>
+                        </td>
+                        <td>
+                            <span>
+                                <input class="text-box single-line" id="remark" name="remark" type="text" value="">
+                            </span>
+                        </td>
+                    </table>
+                    <div class="mt-2">
+                        <button type="submit" id="btnSave" 
+                            href="/candidate_personal_interview?cid={{ candidate.id }}&download=true"
+                            class="btn btn-primary btn-sm waves-effect waves-dark pull-right m-0">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% include 'elements/modals/admin_personal_interview_modal.html' %}
+        {% include 'elements/modals/admin_view_results_modal.html' %}
+        {% include 'admin_script.html' %}
+        <script type="text/javascript">
+            $(function () {
+                $('span.AddRecordBtn').click(function () {
+                    $('.AddRecord').slideToggle('slow');
+                });
+            });
+
+            var selected = []
+            $('.form-control').click(function () {
+                var check = $("input[type='checkbox']:checked");
+                $("#parameter_table tr").remove();
+                check.each(function( i, val ) {
+                    AppendRow($(this).val(), i);
+                });
+            });
+
+            function AppendRow(responseVal, index) {
+                rvv = "'"+responseVal+"'"; 
+                rv = responseVal;
+                Good = "'Good'";
+                Average = "'Average'";
+                BelowAverage = "'Below Average'";
+                gc = ac = bac = '';
+                if(selected[rv] != undefined){
+                    switch (selected[rv]) { case 'Good': gc = 'checked'; break;
+                        case 'Average': ac = 'checked'; break; 
+                        case 'Below Average': bac = 'checked'; break;
+                    }
+                }
+                row  = '<tr><td id="'+rv+'" name="'+rv+'"><span>'+rv+'</span></td>';
+                row += '<td> <div class=""><span>';
+                row +='<label for="Good'+rv+'"> <input type="radio" '+gc+' onclick="saveVal('+rvv+', '+Good+')" id="Good'+rv+'" name="'+rv+'" value="Good"> Good </label>&nbsp&nbsp&nbsp&nbsp&nbsp ';
+                row += '<label for="Average'+rv+'"> <input type="radio" '+ac+' onclick="saveVal('+rvv+', '+Average+')" id="Average'+rv+'" name="'+rv+'" value="Average"> Average</label> &nbsp&nbsp&nbsp&nbsp&nbsp ';
+                row += '<label for="BelowAverage'+rv+'"> <input type="radio" '+bac+' onclick="saveVal('+rvv+', '+BelowAverage+')" id="BelowAverage'+rv+'" name="'+rv+'" value="Below Average"> Below Average</label> &nbsp&nbsp&nbsp&nbsp&nbsp';
+                row += '</span></div></td></tr>';
+                $("#parameter_table").append(row);
+            }
+
+            function saveVal(key, val){
+                selected[key] = val;
+            }
+
+        </script>
+</body>
+
+</html>

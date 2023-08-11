@@ -1,0 +1,136 @@
+<!--**************TYPE 1  MCQ**************-->
+<div id="searchResult">
+    <div class="questions">
+        <div class="">
+            <h3 class="pull-right">{{question.question_id.type}}</h3>
+            <div class="clearfix"></div>
+            <hr class="hr">
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="p-2">
+                    {% if question.passage %}
+                    <h5>Read the passage and answer the given questions: </h5>
+                    <p
+                        style="color: #212121; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; font-size: 14px; text-align:initial; word-break: break-all">{{question.passage.description}}
+                    </p>
+                    {% endif %}
+                    <p
+                        style="color: #212121;padding: 2px;margin: 2px; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; font-size: 14px; white-space: pre-wrap;">
+                        <br>Read the question given below and tick the correct option you consider the most appropriate.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt10">
+            <span class="bold">{% if ques_number %}{{ques_number}}{% else %}Q{% endif %}.&nbsp;</span>
+            <span class="bold" style="text-align:initial; word-break: break-all">{{question.question_title}}</span>
+        </div>
+
+        <div id="heading7">
+            <div class="answer-details">
+                <label for="chk1">
+                    <div class="form-inline ans mb10">
+                        <div class="col-auto text-left">
+                            <h6 class="ab-label">A. </h6>
+                        </div>
+                        <div class="col-md-11">
+                            <span class="incorrect bold" style="text-align:initial; word-break: break-all">
+                                {{question.optionA}}
+                            </span>
+                        </div>
+
+                        <div class="col-auto text-right">
+
+                            <span class=" " style="padding-left: 20px;">
+                                <input id="chk1" name ="txtAnswer" value="{{question.optionA}}" type="radio" class="checkuncheck"
+                                {% if attempt_questions %}
+                                {% for individual_result_obj,question_obj in attempt_questions.items %}
+                                {% if question_obj.question_id == question.question_id %}
+                                {% if individual_result_obj.candidate_answer == question.optionA %}checked{% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}>
+                            </span>
+                        </div>
+                    </div>
+                </label>
+                <label for="chk2">
+                    <div class="form-inline ans mb10">
+                        <div class="col-auto text-left">
+                            <h6 class="ab-label">B. </h6>
+                        </div>
+                        <div class="col-md-11">
+                            <span class="incorrect bold" style="text-align:initial; word-break: break-all">
+                                {{question.optionB}}
+                            </span>
+                        </div>
+
+                        <div class="col-auto text-right">
+
+                            <span class=" " style="padding-left: 20px;">
+                                <input id="chk2" name ="txtAnswer" value="{{question.optionB}}" type="radio" class="checkuncheck"
+                                {% if attempt_questions %}
+                                {% for individual_result_obj,question_obj in attempt_questions.items %}
+                                {% if question_obj.question_id == question.question_id %}
+                                {% if individual_result_obj.candidate_answer == question.optionB %}checked{% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}>
+                            </span>
+                        </div>
+                    </div>
+                </label>
+                <label for="chk3">
+                    <div class="form-inline ans mb10">
+                        <div class="col-auto text-left">
+                            <h6 class="ab-label">C. </h6>
+                        </div>
+                        <div class="col-md-11">
+                            <span class="incorrect bold" style="text-align:initial; word-break: break-all">
+                                {{question.optionC}}
+                        </div>
+
+                        <div class="col-auto text-right">
+
+                            <span class=" " style="padding-left: 20px;">
+                                <input id="chk3" name ="txtAnswer" value="{{question.optionC}}" type="radio" class="checkuncheck"{% if attempt_questions %}{% for individual_result_obj,question_obj in attempt_questions.items %}{% if question_obj.question_id == question.question_id %}{% if individual_result_obj.candidate_answer == question.optionC %}checked{% endif %}{% endif %}{% endfor %}{% endif %}>
+                            </span>
+                        </div>
+                    </div>
+                </label>
+                <label for="chk4">
+                    <div class="form-inline ans mb10">
+                        <div class="col-auto text-left">
+                            <h6 class="ab-label ">D. </h6>
+                        </div>
+                        <div class="col-md-11">
+                            <span class="incorrect bold" style="text-align:initial; word-break: break-all">
+                                {{question.optionD}}
+                            </span>
+                        </div>
+                        <div class="col-auto text-right">
+                            <span class=" " style="padding-left: 20px;">
+                                <input id="chk4" name ="txtAnswer" value="{{question.optionD}}" type="radio" class="checkuncheck"
+                                {% if attempt_questions %}
+                                {% for individual_result_obj,question_obj in attempt_questions.items %}
+                                {% if question_obj.question_id == question.question_id %}
+                                {% if individual_result_obj.candidate_answer == question.optionD %}checked{% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}>
+                            </span>
+                        </div>
+                    </div>
+                </label>
+            </div>
+        </div>
+        <script language="javascript">
+            function Disablebutton() {
+                $("#btnSaveNext").attr("disabled", true);
+                $("#btnprevious").attr("disabled", true);
+            }
+        </script>
+    </div>
+</div>

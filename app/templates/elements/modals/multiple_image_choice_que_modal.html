@@ -1,0 +1,100 @@
+{% load static %}
+
+
+<div class="">
+    <div class="modal fade" id="exampleModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+        aria-labelledby="exampleModalLabel" aria-hidden="true" style="left: -31%">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 230%;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalHeading">Add Question</h5>
+                </div>
+                <div class="modal-body">
+                    <form data-parsley-validate method="POST" action="multiple_imag_choice_que_request"
+                        enctype="multipart/form-data" id="demo-form">
+                        {% csrf_token %}
+                        <input type="hidden" name="method" value="" id="editMethod">
+                        <input type="hidden" id="hiddenID" value="" name="question_id">
+                        <div class="card custom" id="user_form" style="padding-bottom:2% ;">
+                            <div class="card-header"></div>
+                            <div class="col-md-12 row">
+                                <div class="col-md-12 row">
+                                    <div class="col-md-6 custom-input">
+                                        {{ form.question_title.label }} {{ form.question_title }}
+                                    </div>
+                                    <div class="col-md-6 custom-input">
+                                        {{ form.subjects.label }} {{ form.subjects}}
+                                    </div>
+                                </div>
+                                <div class="col-md-12 row">
+                                    <!-- option A -->
+                                    <div class="col-md-3 mt20 ">
+                                        <div id="" class="img-frame" style="margin-left: 8%; height: 80%; width: 80%;">
+                                            <img id="A" src="" class="ques-img">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 custom-input" style="padding-top:10%; margin-left: -4%; ">
+                                        {{ form.optionA.label }} {{form.optionA}}
+                                        <span class="input-group-addon" style="margin-right:84% ;">
+                                            <input id="chkboxOption0" value="optionA" type="radio" name="AnswerKey" checked="true">
+                                        </span>
+                                    </div>
+                                    <!-- option B -->
+                                    <div class="col-md-3 mt20" style="margin-left:15 ;">
+                                        <div id="" class="img-frame" style="margin-left: 25%; height: 80%; width: 80%">
+                                            <img id="B" src="" class="ques-img">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 custom-input" style="padding-top:10%; margin-left: 0%;">
+                                        {{ form.optionB.label }} {{form.optionB}}
+                                        <span class="input-group-addon" style="margin-right:84%;">
+                                            <input id="chkboxOption1" value="optionB" type="radio" name="AnswerKey">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 row">
+                                    <!-- option C -->
+                                    <div class="col-md-3 mt20 ">
+                                        <div id="" class="img-frame" style="margin-left: 8%; height: 80%; width: 80%">
+                                            <img id="C" src="" class="ques-img">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 custom-input" style="padding-top:10%; margin-left: -4%;">
+                                        {{ form.optionC.label }} {{form.optionC}}
+                                        <span class="input-group-addon" style="margin-right:84% ;">
+                                            <input id="chkboxOption2" value="optionC" type="radio" name="AnswerKey">
+                                        </span>
+                                    </div>
+                                    <!-- option D -->
+                                    <div class="col-md-3 mt20 ">
+                                        <div id="" class="img-frame" style="margin-left: 25%; height: 80%; width: 80%">
+                                            <img id="D" src="" class="ques-img">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 custom-input" style="padding-top:10%; ">
+                                        {{ form.optionD.label }} {{form.optionD}}
+                                        <span class="input-group-addon" style="margin-right:84% ;">
+                                            <input id="chkboxOption3" value="optionD" type="radio" name="AnswerKey">
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt10">
+                            <div class="pull-right" style="margin: 5px;">
+                                <button type="button" id="close-dialoge" value="close"
+                                    class="btn btn-secondary btn-sm waves-effect waves-dark pull-right"
+                                    data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                            <div class="pull-right" style="margin: 5px;">
+                                <button type="submit" id="add_question_btn" value="Save"
+                                    class="btn btn-primary btn-sm waves-effect waves-dark pull-right">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{% static 'assets/js/image.js' %}"></script>

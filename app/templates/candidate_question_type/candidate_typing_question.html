@@ -1,0 +1,19 @@
+ <div class="typing-test">
+    <div style="display:none;" id="dvtime">00:05:00</div>
+    <div class="test-paper-main">
+        <div class="row">
+            <div class="col-md-6">
+                <textarea name="txtAnswer" rows="2" cols="20" id="txtAnswer" class="textArea"spellcheck="false" onpaste="return false;" oncut="return false;" oncopy="return false;"placeholder="Type your text here.."style="height:500px;width:100%;border: 1px solid #DDD; font-family: verdana; font-size: 17px;"></textarea>
+            </div>
+            <div class="col-md-6">
+                <div style="width: 97%; background-color: lightgoldenrodyellow; padding: 10px;">
+                    <span id="lblTypingQuestion" oncopy="return false;"style="font-family: verdana; font-size: 17px;">
+                        <span name ="typing" id="typing" class="bold" style="text-align:justify; word-break: break-all">{{question.description}}</span>
+                        <input type="hidden" name ="endgame" id="endgame" value="">
+                        <input type="hidden" name ="start" id="start" value="">
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

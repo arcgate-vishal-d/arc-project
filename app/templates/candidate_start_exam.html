@@ -1,0 +1,55 @@
+{% load static %}
+{% include 'candidate_style.html' %}
+
+
+<div class="text-center ArcOrange" style="margin-top:-15px;  margin-bottom: -20px;">
+    <img src="{% static 'assets/images/arcgate-image.png' %}" width="250" alt=""
+        title="ArcGate Interview">
+</div>
+
+    <div class="container-fluid">
+        <div class="test-paper-main col-md-12">
+                        <div class="mb10">
+                            <div class="text-center bold"><span class="">Paper Set: </span><span> {{paper_set}}  </span></div>
+                            <div class="clearfix"></div>
+                            <div class="pull-left">
+                                <span class="bold ">Paper Time: </span><span> {{paper_set.paper_time}} (Min)</span>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="pull-left"><span class="bold ">Total Marks:</span> <span> {{paper_set.paper_marks}}  </span></div>
+                            <div class="clearfix"></div>
+                        </div>
+                    <table class="table table-sm">
+                        <tbody>
+                            <tr class="mdb-color darken-3 white-text">
+                                <td class="bold text-center">Subject</td>
+                                <td class="bold text-center">Total Question </td>
+                                <td class="bold text-center">Total Marks</td>
+                                <td class="bold text-center">Each Question Marks</td>
+                                <td class="bold text-center">Test Time</td>
+                            </tr>
+                            {% for paper in paper_data %}
+                            <tr>
+                                <td style="text-align: center;">{{paper.subject}}   </td>
+                                <td style="text-align: center;">  {{paper.subject_questions}}  </td>
+                                <td style="text-align: center;"> {{paper.subject_marks}} </td>
+                                <td style="text-align: center;">   {% widthratio paper.subject_marks  paper.subject_questions 1 %} </td>
+                                <td style="text-align: center;"> {{paper.subject_time}}   </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+            <div class="row"><div class="col-md-2"><a href="/exam" class="btn btn-block btn-success btn-sm waves-effect waves-light">Start</a></div></div>
+        </div>
+    </div>
+{% include 'candidate_script.html' %}
+<script>
+    // disable back button
+history.pushState(null, document.title, location.href);
+window.addEventListener('popstate', function (event)
+{
+  history.pushState(null, document.title, location.href);
+});
+</script>
+   </body>
+   </html>

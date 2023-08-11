@@ -1,0 +1,26 @@
+{% load static %}
+{% include 'candidate_style.html' %}
+
+<body class="ArcBG" style="background-image:url('{% static 'assets/images/the_arcgate.jpg'%}');">
+    <div class="FlexCenter BgOverlay " style="">
+        <div class="col-md-4 mb-r animated fadeInDown">
+            <!--Form without header-->
+            <div class="card">
+                <div class="card-body">
+                    <!--Header-->
+                    <div class="text-center ArcOrange" style="margin-top:-20px;">
+                        <img src="{% static 'assets/images/arcgate-image.png' %}" width="150" alt=""
+                            title="ArcGate Interview">
+                    </div>
+                    <h4 class="Interview" style="margin-top: -50px; margin-left: 200px; color:red;">
+                        Interview
+                    </h4>
+                    <a class="list-group-item list-group-item-action" href="/candidate_personal_details" style="margin-top:30px;">
+                        <h5 style="margin-left:180px;">Start Interview</h5>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% include 'candidate_script.html' %}

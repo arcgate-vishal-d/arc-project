@@ -1,0 +1,52 @@
+
+<div class="modal fade" id="exampleModal2" data-bs-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel2" aria-hidden="true" style="left: -31%">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 200%; padding: 4%">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel2">
+                    <strong id="modalHeading">Add excel screenshot</strong>
+                </h5>
+            </div>
+            <div class="col-md-12">
+                <div class="card custom AddRecord row" style="display: block">
+                    <form action="excel_question" enctype="multipart/form-data" method="POST" id="excel-image-form" onsubmit="close_modal()" data-parsley-validate>
+                        {% csrf_token %}
+                        <input type="hidden" name="method" value="put" id="editMethod">
+                        <input type="hidden" id="hiddenID" value="" name="excel_id">
+                        <div class="custom" id="user_form">
+                            <div id="divMCQ" style="padding-top: 24px; padding-bottom: 10px">
+                                <div class="col-md-12 row">
+
+                                   <div class="col-md-3 mt20 ">
+                                        <div id="dvPreview" class="img-frame" style="margin-left: 8%;">
+                                            <img id="upload" src="" class="ques-img">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 mt80 custom-input" style="padding-top:10%;">
+                                        {{excel_image_form.screenshot.label}} 
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                {{excel_image_form.screenshot}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt10">
+                            <div class="pull-right" style="margin: 5px;">
+                                <button type="button" id="close-dialoge" value="close" class="btn btn-secondary btn-sm waves-effect waves-dark pull-right"  data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                            
+                            <div class="pull-right" style="margin: 5px;">
+                                <button type="submit" id="add_image_btn" value="Save"
+                                    class="btn btn-primary btn-sm waves-effect waves-dark pull-right">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

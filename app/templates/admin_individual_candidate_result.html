@@ -1,0 +1,182 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+
+
+<div class="container-fluid mt80">   
+    <div class="ControlPanel exam-result">
+        <div class="card mb20 ">
+            {% for candidate in candidate_details %}
+            <div class="card-header">
+                <h4><strong>{{candidate.first_name }} {{candidate.last_name }} ({{candidate.mobile_no_1}})</strong></h4>
+            </div>
+            {% endfor %}
+            <div class="card-body">
+                <table width="100%" class="mt-bottom10">
+                {% for paper in paper %}
+                    {% if forloop.counter == 1 %}
+                    <tbody>
+                        <tr>
+                            <td class="font-bold">Paper Name:&nbsp;
+                                <span class="bdr-dashed"><label for="Quality Analyst - Test Paper">{{paper.paper_set_id.paper_title }}</label></span>
+                            </td>
+                            <td class="font-bold">Candidate total marks:&nbsp;
+                                <span class="bdr-dashed">{{marks|floatformat:2 }}</span>
+                            </td>
+                            <td class="font-bold">Timings:&nbsp;
+                                <span class="bdr-dashed"><label for="">{{paper.paper_set_id.paper_time}}</label></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                    {% endif %}
+                </table>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+       
+    {% include 'elements/messages.html' %}
+    <div class="ExamResult">
+        <div class="badge badge-info question-type">
+            {% for subject, value in dict.items %}
+            {{subject.subject}} &nbsp;|&nbsp;
+            {% endfor %}
+        </div>
+        
+        {% for subject, value in dict.items %}
+        <div class="font-bold font-size18 mdb-color px-3 py-1 darken-3 white-text">{{subject.subject}}</div>
+        {% for question in value %} &nbsp;
+        <div class="row custom">
+            <div class="col-md-8">
+            {% if question.question_id.type == 'Multiple Image Choice Question' %}
+                <div class="options" >
+                    <div style="margin-left:20px;">
+                        <span class="font-size16 pd-left15" style="text-align: center; word-break: break-all">
+                            <b>
+                                {{ forloop.counter }}.{{question.question_title}}
+                            </b>
+                        </span>
+                    </div>
+                    <p style="color: #212121; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; font-size: 14px; white-space: pre-wrap;"><br>Read the questions given below and tick the correct option you consider the most appropriate</p>
+                        <br>
+                    <div class="options">
+                        <div class="pd-left40 pd-bottom5" >
+                            <span style="margin-left: 17px;" style="text-align: center; word-break: break-all">(1)</span><img {% if question.optionA.url == question.answer_key.url %} style="height:150px; width:150px; border-style: solid; border-color: green;" {% else %} style="height:150px; width:150px; border-style: solid; border-color: black;"{% endif %} src="{{question.optionA.url}}" ></span>
+                        
+                            <span style="margin-left: 17px;"style="text-align: center; word-break: break-all">(2)</span><img {% if question.optionB.url == question.answer_key.url %} style="height:150px; width:150px; border-style: solid; border-color: green;" {% else %} style="height:150px; width:150px; border-style: solid; border-color: black;"{% endif %} src="{{question.optionB.url}}" ></span>
+                        
+                            <span style="margin-left: 17px;"style="text-align: center; word-break: break-all">(3)</span><img {% if question.optionC.url == question.answer_key.url %} style="height:150px; width:150px; border-style: solid; border-color: green;" {% else %} style="height:150px; width:150px; border-style: solid; border-color: black;"{% endif %} src="{{question.optionC.url}}" ></span>
+                        
+                            <span style="margin-left: 17px;"style="text-align: center; word-break: break-all">(4)</span><img {% if question.optionD.url == question.answer_key.url %} style="height:150px; width:150px; border-style: solid; border-color: green;" {% else %} style="height:150px; width:150px; border-style: solid; border-color: black;"{% endif %} src="{{question.optionD.url}}" ></span>
+                        <br>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            {% else %}
+                <div class="options" >
+                    <div style="margin-left:20px;">
+                        {% if question.passage %}
+                        <div class="p-2"style="border-style: solid; border-color: green;">
+                            <p style="color: #212121; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; font-size: 14px; white-space: pre-wrap;"style="text-align: center; word-break: break-all"><br>Read the passage carefully and answer the questions belows</p>
+                            <p style="color: #212121; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; font-size: 14px; white-space: pre-wrap;"style="text-align: center; word-break: break-all">{{question.passage.description}}</p>
+                        </div>
+                        <p style="color: #212121; font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif; font-size: 14px; white-space: pre-wrap;"><br>Read the questions given below and tick the correct option you consider the most appropriate</p>
+                        {% endif %}
+                        {% if question.instructions %}
+                            <div class="">
+                                <div class="p-2">
+                            <h5><strong>{{question.instructions}}&nbsp;</strong></h5>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if not question.passage %}
+                            {% if question.question_id.type == "multiple choice question" %}
+                            <div class="">
+                                <div class="p-2">
+                                    <h5><strong>Select the suitable answer out of the options given.&nbsp;</strong></h5>
+                                </div>
+                            </div>
+                            {% endif %}
+                        {% endif %}
+
+                        <span class="font-size16 pd-left15"style="text-align: center; word-break: break-all">
+                            <b>
+                                {{ forloop.counter }}.{{question.question_title}}
+                            </b>
+                        </span>
+                        <br>
+
+                        {% if question.image.url %}
+                            <br>
+                            <span><img src="{{question.image.url}}" style="height:150px; width:150px;"></span>
+                        {% endif %}
+
+                        {% if question.question_id.type == "multiple choice question" or question.question_id.type == "image based MCQ" %}
+                        <div class="options">
+                        <div class="pd-left40 pd-bottom5" >
+                            <span>(1)</span> <span style="text-align: center; word-break: break-all" {% if question.optionA == question.answer_key %} class="font-bold-green" {% else %}{% endif %}>{{question.optionA}}</span>
+                        <br>
+                            <span>(2)</span> <span style="text-align: center; word-break: break-all" {% if question.optionB == question.answer_key %} class="font-bold-green" {% else %}{% endif %}>{{question.optionB}}</span>
+                        <br>
+                            <span>(3)</span> <span style="text-align: center; word-break: break-all" {% if question.optionC == question.answer_key %} class="font-bold-green" {% else %}{% endif %}>{{question.optionC}}</span>
+                        <br>
+                            <span>(4)</span> <span style="text-align: center; word-break: break-all" {% if question.optionD == question.answer_key %} class="font-bold-green" {% else %}{% endif %}>{{question.optionD}}</span>
+                        <br>
+
+                        </div>
+                        </div>
+                        {% else %}
+                        <div class="pd-left15 pd-bottom5">
+                            {% if question.types == 'typing' %}
+                            <span class="font-bold pd-left25"style="text-align: center; word-break: break-all"> Content:&nbsp; {{question.description}}</span>
+                            {% elif question.type == 'Excel' %}
+                            <span class="font-bold pd-left25"style="text-align: center; word-break: break-all"> Description :&nbsp; {{question.description}}</span>
+                            {% else %}
+                            <span class="font-bold pd-left25"style="text-align: center; word-break: break-all">Answer :&nbsp; {{question.answer_key}}</span>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <hr>
+            {% endif %}
+        </div>
+            {% for key, values in candidate_answers.items %}
+            {% if key == question.question_id.id %}
+            <div class="col-md-3">
+                <h4>Answered by examinee:-</h4>
+                <h5><span class="bold"style="text-align: center; word-break: break-all">User Answer:</span>{{values.candidate_answer}}                        </h5>
+                <h5><span class="bold">Status: </span><span {% if values.answer_status == "Correct" %} 
+                    class="font-bold-green" {% else %} class="text-danger" {% endif %}>{{values.answer_status}}</span></h5>
+                <h5><span class="bold">{% if question.types == 'typing' %} Accuracy {% else %} Marks Obtained: {% endif %}</span>
+                        <span>{{values.answer_marks}}</span></h5>
+                <div class="input-group">
+                    <form action="" method="POST" data-parsley-validate>
+                            {% csrf_token %}
+                        <span class="bold">Marks Obtained Manual:
+                            <br> &nbsp;(Max marks:{% widthratio subject.subject_marks subject.subject_questions 1 %}) </span>
+                        <div>
+                            <input type="text" class="mt-left10" id="{{values}}" name="{{values.id}}"
+                            data-parsley-type="digits"
+                            data-val-number="The field TotalMarks must be a number." data-parsley-trigger="change"
+                            data-parsley-range="[0, {% widthratio subject.subject_marks subject.subject_questions 1 %}]"
+                            data-parsley-range-message="Questions marks should be in range 0 to max marks">
+
+                            <input type="hidden" value="{{values.id}}" name="candidate_result">
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        {% endfor %}
+        <hr class="hr mb30 row">
+    </div>
+</div>
+
+{% include 'admin_script.html' %}
+</body>
+</html>

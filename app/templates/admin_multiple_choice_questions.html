@@ -1,0 +1,146 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+
+<div class="container-fluid mt80">
+
+    <h5>Multiple Choice Questions</h5>
+    <div class="custom">
+        <div class="card">
+            <div class="card-header">
+                <div>Apply Filter
+                    <button type="button" class="btn btn-primary pull-right AddRecordBtn blue-text" id="add_mcq"
+                        style="border-radius: 55px;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Add Question
+                    </button>
+                </div>
+            </div>
+            <div class="SearchPanel" style="display: block;">
+                <form>
+                    <div class="card-body">
+                        <div class="row pd20">
+                            <form action="" method="get">
+                                <div class="col-md-3 mb10">
+                                    {{mcq_search_form.question_title.label}}
+                                    {{mcq_search_form.question_title}}
+                                </div>
+                                <div class="col-md-3 mb10">
+                                    {{mcq_search_form.subjects.label}}
+                                    {{mcq_search_form.subjects}}
+                                </div>
+                                <div class="col-md-3">
+                                    <button type="submit" id="Search" value="Search"
+                                        class="btn btn-primary btn-sm waves-effect waves-dark" style="top: 27%;">Search
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+            </div>
+        </div>
+        </form>
+    </div>
+
+    <!-- modal -->
+    {% include "elements/modals/admin_multiple_choice_questions_modal.html" %}
+    <!-- modal ends -->
+    {% include 'elements/messages.html' %}
+    <!--  start of data -->
+    <div id="my-accordion" class="" role="tablist" aria-multiselectable="true" class="row">
+        <table id="tblQuestions" class="table table-sm" cellpadding="0" cellspacing="0">
+            <thead class="mdb-color darken-3">
+                <tr class="text-white wdth80 text-center">
+                    <th class="width60per" style="width: 20px;">Question & options</th>
+                    <th class="width10per">Subject</th>
+                    <th class="width10per">Created By</th>
+                    <th class="width10per">Created Date</th>
+                    <th class="width10per">Actions</th>
+                </tr>
+            </thead>
+            <tr id="datavalue"></tr>
+            <tbody id="demo">
+                {% for question in data %}
+                <tr id="mcq{{question.id}}">
+                    <td class="EditData width40per" style="word-break: break-all;">
+                        <h5 align="justify"> Q. {{question.question_title}}</h5>
+                        <p align="justify" {% if question.answer_key == question.optionA %} style="color: green;" {% else %} {% endif %}>A. {{question.optionA}}</p>
+                        <p align="justify"{% if question.answer_key == question.optionB %}style="color: green;" {% else %}{% endif %}>B. {{question.optionB}}</p>
+                        <p align="justify" {% if question.answer_key == question.optionC %}style="color: green;" {% else %} {% endif %}>C. {{question.optionC}}</p>
+                        <p align="justify"  {% if question.answer_key == question.optionD %}style="color: green;" {% else %} {% endif %}>D. {{question.optionD}}</p>
+                    </td>
+                    <td class="EditSubject" id="{{question.question_id.subject.id}}" style="text-align: center; word-break: break-all">
+                        <span>{{ question.question_id.subject }}</span>
+                    </td>
+                    <td style="text-align: center; word-break: break-all" passage_id="{{question.passage.id}}">
+                        <span>{{question.created_by}}</span>
+                    </td>
+                    <td style="text-align: center;">
+                        <span style="width: 15%; text-align: center;">{{question.modified|date:"d.m.Y"}}</span>
+                    </td>
+                    <td style="text-align: center;">
+                        <a class=" btn btn-info btn-sm edit_mcq" id="edit_mcq{{question.id}}" type="button"
+                            data-toggle="modal" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            data-target="#update_model" style="margin: 5px; display: inline-block;">Edit</a>
+                        <span style="display: inline-block;">
+                            <form method="POST" action="/MCQ_views"
+                                onSubmit="return confirm('Do you want to delete this question ?')">
+                                {% csrf_token %}
+                                <input type="hidden" name="method" value="delete">
+                                <input type="hidden" value="{{question.id}}" name="mcq_id">
+                                <button type='submit' class=" btn btn-danger btn-sm"
+                                    style="margin: 5px;">Delete</button>
+                            </form>
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include 'elements/pagination.html' %}
+</div>
+{% include 'admin_script.html' %}
+
+<script>
+    $("#add_mcq").on("click", function () {
+        $("#mcq_form").parsley().reset()
+        $("#exampleModalLabel").html("Add Content");
+        $("#mcq_form")[0].reset()
+
+    })
+
+    $(".edit_mcq").on("click", function (e) {
+        $("#mcq_form").parsley().reset()
+        $("#exampleModalLabel").html("Edit Content");
+        var row_id = e.currentTarget.id.slice(8,);
+        var row_data = document.getElementById("mcq" + row_id);
+        var question_title = row_data.cells[0].querySelector('h5').innerText.slice(3,);
+        var option_a = row_data.cells[0].querySelectorAll('p')[0].innerText.slice(3,);
+        var option_b = row_data.cells[0].querySelectorAll('p')[1].innerText.slice(3,);
+        var option_c = row_data.cells[0].querySelectorAll('p')[2].innerText.slice(3,);
+        var option_d = row_data.cells[0].querySelectorAll('p')[3].innerText.slice(3,);
+        var subject = row_data.cells[1].getAttribute('id');
+        var passage = row_data.cells[2].getAttribute('passage_id');
+        var options = row_data.cells[0].querySelectorAll('p');
+
+        for(let i=0 ; i< options.length ; i++){
+            if(options[i].getAttribute('style')){
+                $('#chkboxOption'+[i]).attr('checked',true)
+            } else{
+                $('#chkboxOption'+[i]).attr('checked',false)
+            }
+        }
+        
+        $("#MCQ_subject").val(subject);
+        $("#MCQ_passage").val(passage);
+        $("#MCQ_title").val(question_title);
+        $("#MCQ_optionA").val(option_a);
+        $("#MCQ_optionB").val(option_b);
+        $("#MCQ_optionC").val(option_c);
+        $("#MCQ_optionD").val(option_d);
+        $("#mcq_id").val(row_id);
+        $("#mcq_method").val("put");
+    })
+</script>
+</body>
+</html>

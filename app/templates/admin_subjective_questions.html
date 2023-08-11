@@ -1,0 +1,127 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+
+<div class="container-fluid mt80">
+<h5>Subjective Questions</h5>
+
+    <div class="custom">
+        <div class="card">
+            <div class="card-header">
+                <span class="pull-left SearchPanelBtn">Apply Filter</span>
+                <button style="margin-left:auto;  border-radius: 50px / 55px;" 
+                class="btn btn-primary pull-right AddRecordBtn blue-text" id="addButton"
+                style="margin-left: 298px; position:relative; border-radius: 50px / 55px;"type="button" 
+                data-bs-toggle="modal" data-bs-target="#exampleModal">Add Questions
+                </button>
+            </div>
+            <form method="get" action="">
+                <!-- {% csrf_token %} -->
+                <div class="SearchPanel" style="display: block;">
+                    <div class="card-body">
+                        <div class="form-inline mt10">
+                            
+                            <div class="col-md-3" style="word-break: break-all;">
+                                {{ search_subjective_question_form.question_title.label }} {{ search_subjective_question_form.question_title }}
+                            </div>
+                            <div class="col-md-3" style="margin-bottom:15px;"> {{search_subjective_question_form.question_id.label}}{{search_subjective_question_form.question_id}} 
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" id="" style="margin-top:8px;" value="Search" class="btn btn-primary btn-sm waves-effect waves-dark">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>       
+            </form>
+        </div>
+    </div>
+    {% include 'elements/messages.html' %}
+
+        <table id="tblQuestions" class="table table-sm" cellpadding="0" cellspacing="0" style="display:; ">
+            <thead class="mdb-color darken-3">
+                <tr class="text-white wdth80">
+                    <th style="width:20%; text-align:center;">Question</th>
+                    <th style="width:20%; text-align:center; margin-left:40px;">Answer Key</th>
+                    <th style="text-align:center">Subject</th>
+                    <th style="width:20%; text-align:center;">Instruction</th>
+                    <th style="text-align:center">Created By</th>
+                    <th style="text-align:center">Created Date</th>
+                    <th style="text-align:center">Action</th>
+                </tr>
+            </thead>
+            <tr id="datavalue"></tr>
+            <tbody id="demo">
+                
+                {% for subjective_questions in data %}
+                
+                <tr id="row_data{{subjective_questions.id}}" class="panel-heading">
+                    <td class="EditData" style="text-align:center; word-break: break-all">
+                        {{ subjective_questions.question_title }}
+                    </td>
+                    <td class="EditSubject" style="text-align:center; margin-right:40px; word-break: break-all">
+                        {{ subjective_questions.answer_key }}
+                    </td>
+                    <td style="text-align:center" id="{{ subjective_questions.question_id.subject.id }}">
+                        {{ subjective_questions.question_id.subject }}
+                    </td>
+                    <td style="text-align:center; word-break: break-all ;text-align:center">
+                        {{ subjective_questions.instructions }}
+                    </td>
+                    <td style="text-align:center; word-break: break-all ;" passage_id="{{subjective_questions.passage.id}}">
+                        {{ subjective_questions.created_by }}
+                    </td>
+                    <td style="text-align:center;">
+                        {{ subjective_questions.modified|date:"d.m.Y" }}
+                    </td>
+                    <td style="text-align:center;">
+                        <span type="button" class="btn btn-info btn-sm waves-effect waves-light editButton" id="edit_row_data_{{ subjective_questions.id }}" 
+                        data-bs-toggle="modal" data-bs-target="#exampleModal" style="display: inline-block;">
+                            Edit
+                        </span>
+                        <span style="display: inline-block;">
+                            <form action="/add_subjective_questions" method="POST"
+                                onSubmit="return confirm('Do you want to delete this subjective questions ?')">
+                                {% csrf_token %}
+                                <input type="hidden" name="method" value="delete">
+                                <input type="hidden" value="{{ subjective_questions.id }}" name="subjectquestionsID">
+                                <button class="Delete btn btn-danger btn-sm waves-effect waves-light" type="submit"
+                                    id="Delete" href="/subjective_questions">Delete</button>
+                            </form>
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+{% include 'admin_script.html' %}
+{% include 'elements/modals/admin_subjective_questions_modal.html' %}
+<!-- pagination -->
+{% include 'elements/pagination.html' %}
+
+<script>
+    $('#addButton').on("click", function(){
+        $("#demo-form").parsley().reset()
+        $("#demo-form")[0].reset()
+        $("#modalHeading").html("ADD NEW SUBJECTIVE QUESTION");
+    })
+
+    $(".editButton").on("click", function (e) {
+        $("#demo-form").parsley().reset()
+        $("#modalHeading").html("UPDATE SUBJECTIVE QUESTION");
+        var row_id = e.currentTarget.id.slice(14,)
+        var row_data = document.getElementById("row_data" + row_id)
+        var question = row_data.cells[0].innerText
+        var answer_key = row_data.cells[1].innerText
+        var subject = row_data.cells[2].getAttribute('id')
+        var instructions = row_data.cells[3].innerText
+        var passage = row_data.cells[4].getAttribute('passage_id')
+
+        $('#id_subjects').val(subject)
+        $('#id_question_title').val(question)
+        $('#id_answer_key').val(answer_key)
+        $('#id_instructions').val(instructions)
+        $('#id_passage').val(passage)
+        $("#hiddenID").val(row_id);
+        $("#editMethod").val("put");
+    })
+</script>

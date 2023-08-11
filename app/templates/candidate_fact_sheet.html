@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Candidate fact sheet</title>
+        <style type="text/css">
+        @media print {
+            .worked-before tr,td {
+                border :1px solid #000;
+                padding-top: 2px;
+                }
+        }
+
+        @page {
+            margin-top: 1cm;
+            margin-bottom: 1cm;
+            margin-left: 1cm;
+            margin-right: 1cm;
+
+            tr {
+                border:1px solid #000;
+            }  
+        }
+            /* factSheet */
+
+        .result-table{
+            border: 1px solid black;
+        }
+        .result-table tr, th{
+            text-align: center;
+            padding-left: 5px;
+            padding-top: 2px;
+        }
+        .result-table tr td{
+            text-align: left;
+            padding-left: 5px;
+            padding-top: 2px;
+        }
+                
+
+    </style>
+</head>
+<body>
+<table >
+    <tr>
+        <td style="border:0px; font-size: 22px; padding-left: 10px;">&nbsp;{{candidate_personal.first_name}} {{candidate_personal.last_name}}</td>
+        <td style="border:0px;"></td> 
+        <td style="text-align:right; border:0px; padding-top: 10px; padding-right: 10px;"><img  width="80" height="15"  
+            src="data:image/png;base64,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" >
+ 
+            <h1 style="padding-top: 1pt;padding-left: 5pt;text-indent: 0pt;text-align: right;">Date: <span class="s1">{{ candidate_personal.modified|date:"d.m.Y" }} </span></h1>
+        </td>
+    </tr>
+</table>
+
+        
+
+    </span>
+
+</p>
+   
+
+    <ol id="l1">
+        <li data-list-text="1.">
+            <p style="padding-top: 0pt;padding-left: 15pt;text-indent: -9pt;text-align: left;"><strong>1. Personal Details</strong></p>
+            <p style="padding-top: 0pt;padding-left: 5pt;text-indent: 0pt;text-align: left;">
+            <strong>Gender:</strong> 
+                <span class="s2">{{candidate_personal.gender}} &nbsp; </span>
+                <strong>Date of Birth: </strong>
+                <span class="s2">{{candidate_personal.dob}} &nbsp;  </span>
+                <strong>Mobile: </strong>
+                <span class="s2">{{candidate_personal.mobile_no_1}} &nbsp; </span>
+                    <a href="mailto:M.Rehankhan7867@Gmail.Com"
+                    style=" color: #202428; font-family:Arial, sans-serif; font-style: normal; text-decoration: none; "
+                    target="_blank"><strong>Email: </strong></a>
+                    <a href="mailto:{{candidate_personal.email}}"
+                    target="_blank">{{candidate_personal.email}}</a>
+            </p>
+            <p style="padding-top: 2pt;padding-left: 5pt;text-indent: 0pt;text-align: left;"><strong>Present Address:</strong> <span
+                    class="s2">{{candidate_personal.present_address}} {{candidate_personal.district_present}}</span></p>
+            <p style="padding-top: 2pt;padding-left: 5pt;text-indent: 0pt;text-align: left;"><strong>Permanent Address: </strong><span
+                    class="s2">{{candidate_personal.permanent_address}} {{candidate_personal.district_permanent}}</span></p>
+            <p style="padding-top: 2pt;padding-left: 5pt;text-indent: 0pt;text-align: left;"><strong>Have you Applied Arcgate
+                before? : </strong><span class="s2">{% if candidate_source.previous_interviewed == "True" %}Yes{% else %}No{% endif %} </span>
+            <strong>Have you Worked in Arcgate before? : </strong> <span class="s2">{% if candidate_source.previous_worked == "True" %}Yes{% else %}No{% endif %}</span></p>
+                {% if source_list %}
+            <table class="worked-before" style="border-collapse:collapse;margin-left:6.29585pt" cellspacing="0">
+                <tr>
+                    <td style="width:520pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt"
+                        colspan="4">
+                        <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">
+                        <strong>How did you hear
+                            about Arcgate? : </strong></p>
+                    </td>
+                </tr>
+                <tr>
+                    {% for source in source_list %}
+                    <td
+                        style="width:193pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-top: 0pt;padding-left: 3pt;text-indent: 0pt;text-align: left;">
+                            {{source}}</p>
+                    </td>
+                    {% endfor %}
+                </tr>
+            </table>
+            {% endif %}
+        </li>
+        <li data-list-text="2.">
+            <p style="padding-top: 0pt;padding-left: 10pt;text-indent: -9pt;text-align: left;"><strong>2. Educational Qualification</strong>
+            </p>
+            <table class="educational-details" style="border-collapse:collapse;margin-left:6.29585pt" cellspacing="0">
+                <tr style="height:15pt">
+                    <td
+                        style="width:53pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: -3pt;text-indent: 0pt;text-align: left;"><strong>Education</strong></p>
+                    </td>
+                    <td
+                        style="width:81pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: -3pt;text-indent: 0pt;text-align: left;"><strong>Education Details</strong></p>
+                    </td>
+                    <td
+                        style="width:136pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: -3pt;text-indent: 0pt;text-align: left;"><strong>School/College</strong></p>
+                    </td>
+                    <td
+                        style="width:78pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: -2pt;text-indent: 0pt;text-align: left;"><strong>Board/University</strong></p>
+                    </td>
+                    <td
+                        style="width:40pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: -10pt;text-indent: 0pt;text-align: left;"><strong>Medium</strong></p>
+                    </td>
+                    <td
+                        style="width:62pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="text-indent: 0pt;text-align: center;padding-left: -10pt;"><strong>Passing Year</strong></p>
+                    </td>
+                    <td
+                        style="width:42pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="text-indent: 0pt;text-align: center; padding-left: -10pt;"><strong>Division</strong></p>
+                    </td>
+                    <td
+                        style="width:28pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="text-indent: 0pt;text-align: center;"><strong>%</strong></p>
+                    </td>
+                </tr>
+                {% for qualification in education %}
+                <tr style="height:15pt">
+                    <td
+                        style="width:53pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">{{qualification.qualifications}}</p>
+                    </td>
+                    <td
+                        style="width:81pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-top: 0pt;padding-left: 3pt;text-indent: 0pt;text-align: left;">{{qualification.education_details}}</p>
+                    </td>
+                    <td
+                        style="width:136pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-top: 0pt;padding-left: 3pt;text-indent: 0pt;text-align: left;">{{qualification.school_college}}</p>
+                    </td>
+                    <td
+                        style="width:78pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-top: 0pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">{{qualification.board_university}}
+                        </p>
+                    </td>
+                    <td
+                        style="width:40pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-top: 0pt;padding-left: 2pt;text-indent: 0pt;text-align: left;">
+                            {{qualification.medium}}</p>
+                    </td>
+                    <td
+                        style="width:62pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-top: 0pt;text-indent: 0pt;text-align: center;">{{qualification.year_of_passing}}</p>
+                    </td>
+                    <td
+                        style="width:42pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-top: 0pt;text-indent: 0pt;text-align: center;">{{qualification.division}}</p>
+                    </td>
+                    <td
+                        style="width:28pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5"
+                            style="padding-top: 0pt;padding-left: -18pt;padding-right: 1pt;text-indent: 0pt;text-align: center;">
+                            {{qualification.percentage}}</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </li>
+        <li data-list-text="3.">
+            <p style="padding-top: 0pt;padding-left: 15pt;text-indent: -9pt;text-align: left;"><strong>3. Family Details</strong></p>
+            <table style="border-collapse:collapse;margin-left:6.29585pt" cellspacing="0">
+                <tr style="height:15pt">
+                    <td
+                        style="width:86pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;"><strong>Relation</strong></p>
+                    </td>
+                    <td
+                        style="width:173pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;"><strong>Name</strong></p>
+                    </td>
+                    <td
+                        style="width:113pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;"><strong>Occupation</strong></p>
+                    </td>
+                    <td
+                        style="width:148pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;"><strong>Dependent Y/N</strong></p>
+                    </td>
+                </tr>
+                {% for member in family_members %}
+                <tr style="height:15pt">
+                    <td
+                        style="width:86pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">{{member.relation}}</p>
+                    </td>
+                    <td
+                        style="width:173pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-top: 0pt;padding-left: 3pt;text-indent: 0pt;text-align: left;">
+                    {{member.name}}</p>
+                    </td>
+                    <td
+                        style="width:113pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-top: 0pt;padding-left: 3pt;text-indent: 0pt;text-align: left;">
+                            {{member.occupation}}</p>
+                    </td>
+                    <td
+                        style="width:148pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-top: 0pt;padding-left: 3pt;text-indent: 0pt;text-align: left;">
+                            {% if member.dependent == True %}Yes{% else %}No{% endif %}
+                        </p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </li>
+        <li data-list-text="4.">
+            <p style="padding-left: 15pt;text-indent: -9pt;text-align: left;"><strong>4. Work Experience</strong></p>
+            <table style="border-collapse:collapse;margin-left:6.29585pt" cellspacing="0">
+                <tr style="height:15pt">
+                    <td
+                        style="width:96pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;"><strong>Name of Company</strong></p>
+                    </td>
+                    <td
+                        style="width:67pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;"><strong>Designation</strong></p>
+                    </td>
+                    <td
+                        style="width:70pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;"><strong>Joining Date</strong></p>
+                    </td>
+                    <td
+                        style="width:86pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;"><strong>Date of Leaving</strong></p>
+                    </td>
+                    <td
+                        style="width:105pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 2pt;text-indent: 0pt;text-align: left;"><strong>Reason for Leaving</strong>
+                        </p>
+                    </td>
+                    <td
+                        style="width:96pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s4" style="padding-left: 6pt;padding-right: 5pt;text-indent: 0pt;text-align: center;">
+                        <strong>Last Salary Drawn</strong></p>
+                    </td>
+                </tr>
+                {% if experience %}
+                 {% for work in experience %}
+                
+                <tr style="height:15pt">
+                    <td
+                        style="width:96pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">{{work.name_of_company}}</p>
+                    </td>
+                    <td
+                        style="width:67pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p style="text-indent: 0pt;text-align: left;">{{work.designation}}</p>
+                    </td>
+                    <td
+                        style="width:86pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">{{work.joining_date}}</p>
+                    </td>
+                    <td
+                        style="width:86pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">{{work.reliving_date}}</p>
+                    </td>
+                    <td
+                        style="width:105pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-left: 2pt;text-indent: 0pt;text-align: left;">{{work.reason_of_leaving}}</p>
+                    </td>
+                    <td
+                        style="width:96pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                        <p class="s5" style="padding-left: 6pt;padding-right: 5pt;text-indent: 0pt;text-align: center;">
+                            {{work.last_salary}}</p>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr style="height:15pt">
+                    <td colspan="6">
+                    FRESHER
+                    </td>
+                </tr>
+                {% endif %}
+            </table>
+        </li>
+        <li data-list-text="5.">
+            <p style="padding-left: 15pt;text-indent: -9pt;text-align: left;"><strong>5. Are you willing for 1 Year Service
+                Commitment? : </strong> <span class="s3">Yes</span></p>
+        </li>
+        <li data-list-text="6.">
+            <p style="padding-top: 2pt;padding-left: 15pt;text-indent: -9pt;text-align: left;"><strong>6. What is your preferred
+                shift time for work at Arcgate? : </strong><span class="s3">
+                    {% if other_details.shift == "D" %}
+                    Day
+                    {% elif other_details.shift == "N" %}
+                    Night
+                    {% else %}
+                    Any
+                    {% endif %}
+                </span></p>
+        </li>
+        <li data-list-text="7.">
+            <p style="padding-top: 2pt;padding-left: 15pt;text-indent: -9pt;text-align: left;"><strong>7. Joining date if selected
+                : </strong><span class="s3">{{other_details.expected_joining_date}}</span></p>
+        </li>
+        <li data-list-text="8.">
+            <p style="padding-top: 2pt;padding-left: 15pt;text-indent: -9pt;text-align: left;"><strong>8. Salary Expected :</strong> {{other_details.salary_expected}}</p>
+        </li>
+        <li data-list-text="9.">
+            <p style="padding-top: 2pt;padding-left: 5pt;text-indent: 0pt;text-align: left;"><strong>9. Do you agree for 1 month
+                salary as security deposit? : </strong><span class="s3">Yes </span>
+                
+        </li>
+    </ol>
+
+<!-- =================================================================================================================== -->
+
+    <!-- &nbsp; <strong>Round One of Selection Process</strong></p>
+    <table style="border-collapse:collapse;margin-left:6.29585pt" cellspacing="0">
+        <tr style="height:15pt">
+            <td colspan="4" style="text-align: center;"><b>General subjects and IT skill test</b></td>
+        </tr>
+        <tr style="height:15pt">
+            <td
+                style="width:178pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">Sub Sections</p>
+            </td>
+            <td
+                style="width:66pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">Percentage</p>
+            </td>
+            <td
+                style="width:225pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">Sub Sections</p>
+            </td>
+            <td
+                style="width:51pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">Percentage</p>
+            </td>
+        </tr>
+       <h1> Number of Subjects: {{ subjects|length }}</h1>
+        {% for subject,score in subjects.items %}
+            {% if forloop.counter|divisibleby:2 %}
+            {% else %}
+            <tr style="height:15pt">
+            {% endif %}
+            <td
+                style="width:178pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">{{subject}} {% if subject == 'Typing Test' %}{{accuracy}}{% endif %}</p>
+            </td>
+            <td
+                style="width:66pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s5" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">{% if subject == 'Typing Test' %}{% widthratio score 10 1 %} approx.{% else %}{{score}} {% endif %}</p>
+            </td>
+        
+        
+            {% if forloop.counter|divisibleby:2 %}
+            </tr>
+            {% else %}
+            {% endif %}
+        {% endfor %}
+    </table> -->
+
+<!-- ===================================================================================================================== -->
+
+<h1>General subjects and IT skill test</h1>
+<table class="result-table">
+    <tr>
+        <th colspan="2">IT</th>
+    </tr>
+    <tr>
+        <th>Sub section</th>
+        <th>Percentage</th>
+    </tr>
+        {% for subject,score in subjects.items %}
+        {% if subject == 'Typing Test' or subject == 'Excel'  %}
+            {{ break }}
+        {% else %}
+        <tr>
+            <td>{{subject}} </p></td>
+            <td>{% if subject == 'Typing Test' %}{% widthratio score 10 1 %} approx.{% else %}{{score}} {% endif %}</p></td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+
+</table>
+<br>
+
+    <table class="result-table">
+        <tr>
+            <th colspan="2">General</th>
+        </tr>
+        <tr>
+            <th>Sub section</th>
+            <th>Percentage</th>
+        </tr>
+            {% for subject,score in subjects.items %}
+            {% if subject == 'Typing Test' or subject == 'Excel'  %}
+            <tr>
+                <td>{{subject}} </p></td>
+                <td>{% if subject == 'Typing Test' %}{% widthratio score 10 1 %} approx.{% else %}{{score}} {% endif %}</p></td>
+            </tr>
+            {% else %}
+            
+            {% endif %}
+            {% endfor %}
+
+    </table>
+
+
+
+
+<!-- ===================================================================================================================== -->
+
+    <p style="padding-top: 0pt;padding-left: 5pt;text-indent: 0pt;text-align: left;"><b>Result of Round One Selection
+        Process of Interview</b></p>
+    <table style="border-collapse:collapse;margin-left:6.29585pt" cellspacing="0">
+        <tr style="height:15pt">
+            <td
+                style="width:115pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">Selected</p>
+            </td>
+            <td
+                style="width:145pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+            </td>
+            <td
+                style="width:115pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">Selection Status</p>
+            </td>
+            <td
+                style="width:145pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+            </td>
+        </tr>
+        <tr style="height:15pt">
+            <td
+                style="width:115pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">Joining Date</p>
+            </td>
+            <td
+                style="width:145pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+            </td>
+            <td
+                style="width:115pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s4" style="padding-left: 3pt;text-indent: 0pt;text-align: left;">Project Assigned</p>
+            </td>
+            <td
+                style="width:145pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+            </td>
+        </tr>
+        <tr style="height:28pt">
+            <td
+                style="width:115pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s4" style="padding-top: 7pt;padding-left: 3pt;text-indent: 0pt;text-align: left;">Salary
+                    Offered</p>
+            </td>
+            <td
+                style="width:145pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+            </td>
+            <td
+                style="width:115pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s4"
+                    style="padding-left: 3pt;padding-right: 23pt;text-indent: 0pt;line-height: 110%;text-align: left;">
+                    Candiates Singnature (Agreed &amp; Accepted)</p>
+            </td>
+            <td
+                style="width:145pt;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p style="text-indent: 0pt;text-align: left;"><br /></p>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

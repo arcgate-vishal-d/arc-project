@@ -1,0 +1,88 @@
+<!-- ***************Multiple image based question************************* -->
+
+<div class="questions">
+    <div class="">
+        <h3 class="pull-right">{{question.question_id.type}}</h3>
+        <div class="clearfix"></div>
+        <hr class="hr">
+    </div>
+    <table style="width:90%">
+        <tbody>
+            <tr>
+                <td>
+                    <div class="p-2">
+                        <h5><strong>Arrange the following sentence in grammatically correct
+                                sequence:</strong></h5>
+                        <p>&nbsp;</p>
+                    </div>
+                    <div class="mt10">
+                    <span class="bold">{% if ques_number %}{{ques_number}}{% else %}Q{% endif %}.&nbsp;</span>
+                    <span class="bold" style="text-align:initial; word-break: break-all">{{question.question_title}}</span>
+                </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="display:inline-block;">
+        <div style="display: flex; margin-top: 8%;">
+            <div style="margin-right:45%;">
+                <label for=""><strong>A.</strong></label>
+                <img src="{{ question.optionA.url }}" style="height: 150px;width: 300px;">
+                <span class="input-group-addon" style="margin-right:0% ;">
+                    <input id="txtAnswer" value="{{ question.optionA.url }}" type="radio" name="txtAnswer" {% if attempt_questions %}
+                                {% for individual_result_obj,question_obj in attempt_questions.items %}
+                                {% if question_obj.question_id == question.question_id %}
+                                {% if individual_result_obj.candidate_answer == question.optionA.url %}checked{% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}>
+                </span>
+            </div>
+            <div>
+                <label for=""><strong>B.</strong></label>
+                <img src="{{ question.optionB.url }}" style="height: 150px;width: 300px;">
+                <span class="input-group-addon" style="margin-right:0% ;">
+                    <input id="txtAnswer" value="{{ question.optionB.url }}" type="radio" name="txtAnswer"
+                    {% if attempt_questions %}
+                                {% for individual_result_obj,question_obj in attempt_questions.items %}
+                                {% if question_obj.question_id == question.question_id %}
+                                {% if individual_result_obj.candidate_answer == question.optionB.url %}checked{% endif %}
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}>
+                </span>
+        </div>
+
+        </div>
+        <div style="display:flex; margin-top: 8%;">
+            <div style="margin-right:45%; ">
+                <label for=""><Strong>C.</Strong></label>
+                <img src="{{ question.optionC.url }}" style="height: 150px;width: 300px;">
+                <span class="input-group-addon" style="margin-right:0% ;">
+                    <input id="txtAnswer" value="{{ question.optionC.url }}" type="radio" name="txtAnswer"
+                    {% if attempt_questions %}
+                        {% for individual_result_obj,question_obj in attempt_questions.items %}
+                        {% if question_obj.question_id == question.question_id %}
+                        {% if individual_result_obj.candidate_answer == question.optionC.url %}checked{% endif %}
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}>
+                </span>
+            </div>
+            <div>
+                <label for=""><strong>D.</strong></label>
+                <img src="{{ question.optionD.url }}" style="height: 150px;width: 300px;">
+                <span class="input-group-addon" style="margin-right:0% ;">
+                    <input id="txtAnswer" value="{{ question.optionD.url }}" type="radio" name="txtAnswer"
+                    {% if attempt_questions %}
+                        {% for individual_result_obj,question_obj in attempt_questions.items %}
+                        {% if question_obj.question_id == question.question_id %}
+                        {% if individual_result_obj.candidate_answer == question.optionD.url %}checked{% endif %}
+                        {% endif %}
+                        {% endfor %}
+                        {% endif %}>
+                </span>
+            </div>
+        </div>
+    </div>
+</div>  

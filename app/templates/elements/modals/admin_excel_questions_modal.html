@@ -1,0 +1,44 @@
+
+<div class="modal fade" id="exampleModal" data-bs-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true" style="left: -31%">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 200%; padding: 4%">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">
+                    <strong id="modalHeading">Add excel questions</strong>
+                </h5>
+            </div>
+            <div class="col-md-12">
+                <div class="card custom AddRecord row" style="display: block">
+                    <form action="" method="POST" id="excel-form" onsubmit="close_modal()" data-parsley-validate>
+                        {% csrf_token %}
+                        <input type="hidden" name="method" value="" id="editMethod">
+                        <div class="custom" id="user_form">
+                            <div id="divMCQ" style="padding-top: 24px; padding-bottom: 10px">
+                                <div class="col-md-12 row">
+                                    <div class="col-md-6">
+                                      {{excel_form.question_title.label}} {{excel_form.question_title}}
+                                    </div>
+
+                                    <div class="col-md-6">
+                                      {{excel_form.description.label}} {{excel_form.description}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12 mt10">
+                            <div class="pull-right" style="margin: 5px;">
+                                <button type="button" id="close-dialoge" value="close" class="btn btn-secondary btn-sm waves-effect waves-dark pull-right"  data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                            
+                            <div class="pull-right" style="margin: 5px;">
+                                <button type="submit" id="add_question_btn" value="Save"
+                                    class="btn btn-primary btn-sm waves-effect waves-dark pull-right">Save</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

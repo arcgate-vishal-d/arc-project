@@ -1,0 +1,243 @@
+{% load static %}
+{% include 'candidate_style.html' %}
+
+
+<style>
+    .parsley-required {
+        margin-right: 240px;
+    }
+
+    .parsley-maxlength {
+        margin-right: 155px;
+    }
+
+    .parsley-length {
+        margin-right: 175px;
+    }
+
+    .parsley-type {
+        margin-right: 205px;
+    }
+
+    .parsley-pattern {
+        margin-right: 29px;
+    }
+
+    .word_break {
+        word-break: break-all;
+    }
+
+    .parsley-range {
+        margin-right: 115px;
+    }
+</style>
+
+<body>
+    <div class="text-center ArcOrange" style="margin-top:-20px;  margin-bottom: -20px;">
+        <img src="{% static 'assets/images/arcgate-image.png' %}" width="125" alt=""
+            title="ArcGate Interview">
+    </div>
+    <div class="container-fluid mt-80">
+        <div class="educational-details factsheet animated" style="margin-top:60px;">
+            <div class="text-center border border-light p-5">
+                <p class="h4 mb-5" style="color:#e3a04d;"><u>Education Details</u></p>
+                <div style="width: 70%; margin:auto">
+                    {% if edu_details %}
+                    <table class="table" cellpadding="0" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th class="text-left text-center">Qualifications</th>
+                                <th class="text-left text-center">Education Details</th>
+                                <th class="text-left text-center">School/College</th>
+                                <th class="text-left text-center">Board/University</th>
+                                <th class="text-center">Year of Passing</th>
+                                <th class="text-center">Division</th>
+                                <th class="text-center">Percentage</th>
+                                <th class="text-center">Medium</th>
+                                <th class="'text-center">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for data in edu_details %}
+                            <tr>
+                                <td class="text-center word_break">
+                                    <span>{{ data.qualifications}}</span>
+                                </td>
+
+                                <td class="text-center">
+                                    <span>{{ data.education_details}}</span>
+                                </td>
+
+                                <td class="text-center word_break">
+                                    <span>{{ data.school_college }}</span>
+                                </td>
+
+                                <td class="text-center word_break">
+                                    <span>{{ data.board_university}}</span>
+                                </td>
+
+                                <td class="text-center">
+                                    <span>{{ data.year_of_passing}}</span>
+                                </td>
+
+                                <td class="text-center">
+                                    <span>{{ data.division}}</span>
+                                </td>
+
+                                <td class="text-center">
+                                    <span>{{ data.percentage}}</span>
+                                </td>
+
+                                <td class="text-center">
+                                    <span>{{ data.medium}}</span>
+                                </td>
+
+                                <td class="text-center">
+                                    <form action="/candidate_education_details" method="POST"
+                                        onSubmit="return confirm('Are you sure you want to delete?')">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="method" value="delete"></input>
+                                        <input type="hidden" value="{{data.id}}" name="edu_delete">
+                                        <button class="Delete btn btn-danger btn-sm waves-effect waves-light"
+                                            type="submit" id="Delete"
+                                            href="/candidate_education_details">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+
+                    </table>
+                    {% endif %}
+                </div>
+                <div class="container-fluid">
+                    <div id="custom_form11">
+                        <form action="candidate_education_details" method="POST" id="edu_form" data-parsley-validate>
+                            {% csrf_token %}
+                            <div class="factsheet personal-details">
+                                <div class="text-center border border-light py-3 px-5">
+                                    <div class="col-md-12 row">
+                                        <div class="col-md-6">
+                                            <label for="candidate_qualification" class="form-label"
+                                                style="margin-right:300px; margin-top:20px;">Qualifications</label>
+                                            <select class="form-control" name="qualifications"
+                                                id="candidate_qualification" name="qualification" required>
+                                                <option value="">Please select</option>
+                                                <option value="OTHER">AdditionalQualification
+                                                </option>
+                                                <option value="PG"> Post Graduated</option>
+                                                <option value="UG">Under Graduated</option>
+                                                <option value="DIPLOMA">Diploma</option>
+                                                <option value="12">Higher Secondary</option>
+                                                <option value="10">Secondary</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="candidate_education_details" class="form-label"
+                                                style="margin-right:260px; margin-top:20px;">Education Detail</label>
+                                            <input type="text" class="form-control" id="candidate_education_details"
+                                                name="education_details" required data-parsley-maxlength="100"
+                                                data-parsley-maxlength-message="This field can have 100 characters"
+                                                data-parsley-pattern="^[a-zA-Z .,]+$"
+                                                data-parsley-pattern-message="This field can have alphabet only">
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label for="candidate_school_college" class="form-label"
+                                                style="margin-right:300px; margin-top:20px;">School/College</label>
+                                            <input type="text" class="form-control" id="candidate_school_college"
+                                                name="school_college" required data-parsley-maxlength="100"
+                                                data-parsley-maxlength-message="This field can have 100 characters"
+                                                data-parsley-pattern="^[a-zA-Z .,]+$"
+                                                data-parsley-pattern-message="This field can have alphabet only"
+                                                data-parsley-trigger="keyup">
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label for="candidate_board_university" class="form-label"
+                                                style="margin-right:300px; margin-top:20px;">Board/University</label>
+                                            <input type="text" class="form-control" id="candidate_board_university"
+                                                required name="board_university" data-parsley-maxlength="100"
+                                                data-parsley-maxlength-message="This field can have 100 characters"
+                                                data-parsley-pattern="^[a-zA-Z .,]+$"
+                                                data-parsley-pattern-message="This field can have alphabet only"
+                                                data-parsley-trigger="keyup">
+                                        </div>
+
+                                        <div class="mb-3 col-md-6">
+                                            <label for="candidate_year_of_passing" class="form-label"
+                                                style="margin-right:268px;">Year of Passing</label>
+
+                                            <select name="year_of_passing" class="form-control"
+                                                id="candidate_year_of_passing" required data-parsley-trigger="keyup">
+                                                <option value="">Please Select Year</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label for="candidate_percentage" class="form-label"
+                                                style="margin-right:300px;">Percentage</label>
+                                                <span style="position: absolute; margin-left: 163px; margin-top: 7px;">%</span>
+                                            <input type="text" class="form-control" name="percentage" 
+                                                id="candidate_percentage" required data-parsley-range="[1, 100]"
+                                                data-parsley-range-message="This field can take between 1 to 100 only"
+                                                data-parsley-pattern="[0-9]*(\.?[0-9]{1,2}$)?"
+                                                data-parsley-pattern-message="This field must contains digits and upto 2 decimal value">
+                                        </div>
+
+                                        <div class="mb-3 col-md-6">
+                                            <label for="candidate_division" class="form-label"
+                                                style="margin-right:320px;">Division</label>
+                                            <select class="form-control" name="division" id="candidate_division"
+                                                required>
+                                                <option value="">Please select</option>
+                                                <option value="1">First</option>
+                                                <option value="2"> Second</option>
+                                                <option value="3">Third</option>
+                                            </select>
+                                        </div>
+                                        <div class="mb-3 col-md-6">
+                                            <label for="candidate_medium" class="form-label"
+                                                style="margin-right:320px;">Medium</label>
+                                            <select class="form-control" name="medium" id="candidate_medium" required>
+                                                <option value="">Please select</option>
+                                                <option value="E">English</option>
+                                                <option value="H">Hindi</option>
+                                                <option value="O">Others</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary btn-sm waves-effect "
+                                            style="width:20%">Save</button>
+                                    </div>
+                                    <div style="margin-top: 5%; margin-bottom: 12%;">
+                                        <a href="/candidate_family_details" id="btnNext" type="submit"
+                                            class="btn btn-primary btn-sm waves-effect waves-dark pull-right"
+                                            name="Next" style="margin-right: 2%; width: 10%;">Next</a>
+                                        <button id="btnPrevious"
+                                            class="btn btn-primary btn-sm waves-effect waves-dark pull-right"
+                                            name="action" style="margin-right: 2%; width: 10%;">Previous</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            {% include 'candidate_script.html' %}
+
+            <script>
+                $('#btnPrevious').click(function () {
+                    $('#edu_form').parsley().destroy();
+                    parent.history.back()
+                    return false
+                })
+
+                var startYear = 1984;
+                var endYear = new Date().getFullYear();
+                for (i = endYear; i > startYear; i--) {
+                    $('#candidate_year_of_passing').append($('<option />').val(i).html(i));
+                }
+            </script>
+</body>
+</html>

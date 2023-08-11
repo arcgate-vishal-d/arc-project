@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Candidate personal interview</title>
+        <style type="text/css">
+        @media print {
+            .worked-before tr,td {
+                border :1px solid #000;
+                padding-top: 2px;
+                }
+        }
+
+        @page {
+            margin-top: 1cm;
+            margin-bottom: 1cm;
+            margin-left: 1cm;
+            margin-right: 1cm;
+
+            tr {
+                border:1px solid #000;
+            }  
+        }
+        
+
+    </style>
+
+</head>
+<body>
+    
+    <table>
+        <tr>
+        <td style="border:0px;"></td> 
+        <td style="padding-top: 20px; text-indent: 0pt; text-align: center; font-size: 20px; border:0px;">Personal Interview Results</td>
+        <td style="border:0px;"></td> 
+        </tr>
+        <tr>
+            <td style="padding-left: 5pt; padding-top: 0px; text-indent: 0pt;text-align: left; font-size: 18px; border:0px;"> {{candidate.first_name}}&nbsp;{{candidate.last_name}}</td>
+            <td style="border:0px;"></td> 
+            <td style="text-align:right; border:0px; padding-top: 10px; padding-right: 10px;">
+                <img  width="80" height="15"  
+                src="data:image/png;base64,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" >
+            <h5 style="padding-top: 1px; padding-bottom: 10px ;padding-right: 5pt;text-indent: 0pt;text-align: right; border:0px;"><b>Date:</b> 
+                <span class="s1">{{interviewer.modified|date:"d.m.Y"}} &nbsp; </span></h5>
+        </tr>
+
+    <table style="border-collapse:collapse;margin-left:6.34195pt;" cellspacing="0">
+        <tr style="height:15pt">
+            <td style="width:520pt; height:30px;border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt" colspan="2" bgcolor="#CED7DB">
+                <p class="s2" style="padding-left: 3pt;text-indent: 0pt;text-align: left;"><b>{{interviewer.interviewer.first_name}} &nbsp; {{interviewer.interviewer.last_name}}</b></p>
+            </td>
+        </tr>
+            {% for interview_result in interview_results %}
+        <tr style="height:15pt">
+            <td style="width:186pt; height:30px; border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-top: 1pt;padding-left: 3pt;text-indent: 0pt;text-align: left; word-break: break-all">{{interview_result.parameter.parameter}}
+                {% if interview_result.parameter.parameter == null %} Remark{% endif %}</p>
+            </td>
+            <td style="width:520pt; height:30px; border-top-style:solid;border-top-width:1pt;border-left-style:solid;border-left-width:1pt;border-bottom-style:solid;border-bottom-width:1pt;border-right-style:solid;border-right-width:1pt">
+                <p class="s3" style="padding-top: 1pt;padding-left: 3pt;text-indent: 0pt;text-align: left;">{{interview_result.action}}</p>
+            </td>
+        </tr>
+            {% endfor %}
+    </table>
+</body>
+</html>

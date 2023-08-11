@@ -1,0 +1,5 @@
+{% for message in messages %}
+<div id="notice" align="center" class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+    {{ message }}
+</div>
+{% endfor %}

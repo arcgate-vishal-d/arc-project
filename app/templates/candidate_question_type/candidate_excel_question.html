@@ -1,0 +1,15 @@
+<div class="excel-test">
+    <div class="test-paper-main" style="margin-top: 20px;">
+        <div class="row">
+            <div class="col-md-5" style="padding: 0px;">
+                <img src='{{ question.screenshot.url }}' style="height:600px;width:100%;border: 1px solid #DDD;">
+            </div>
+            <div class="col-md-7">
+                <div style="width: 97%; background-color: lightgoldenrodyellow; padding: 10px;">
+                    <iframe src="https://docs.google.com/spreadsheets/d/{{sheet_id}}" style="height:600px;width:100%;border: 1px solid #DDD;"></iframe>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name ="exam_sheet_id" id="exam_sheet_id" value="{{question.sheet_id}}">
+    </div>
+</div>

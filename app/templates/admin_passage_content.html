@@ -1,0 +1,146 @@
+{% load static %}
+{% include 'layout/admin.html' %}
+{% include 'admin_style.html' %}
+
+<div class="container-fluid mt80">
+    <h5>Paragraph Content</h5>
+    <div class="col-md-12 custom">
+        <div class="card row">
+            <div class="card-header">
+                <span>Apply Filter</span>
+                <span class="btn btn-primary pull-right AddRecordBtn blue-text" id="addPassageButton" type="button"
+                    data-bs-toggle="modal" data-bs-target="#passageModal" style="border-radius: 55px;">Add Content</span>
+            </div>
+
+            <form method="get" action="">
+                {% csrf_token %}
+                <div class="card-body">
+                    <div class="form-inline mt10 mb10">
+                        <div class="col-md-3 " style="margin-bottom:16px ;">
+                            {{ search_form.types.label }} {{ search_form.types }}
+                        </div>
+                        <div class="col-md-3 ">
+                            {{ search_form.question_title.label }} {{ search_form.question_title }}
+                        </div>
+                        <div class="col-md-2">
+                            <div class="waves-input-wrapper waves-effect waves-light">
+                                <input type="submit" id="" value="Search"
+                                    class="btn btn-primary btn-sm waves-effect waves-dark"
+                                    style="padding-top: 10px;bottom: 0px;margin-top: 8px;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- table data -->
+    <div id="my-accordion" class="" role="tablist" aria-multiselectable="true">
+        <table id="tblMain" class="table table-sm" cellpadding="0" cellspacing="0" style="display:;">
+            <thead class="mdb-color darken-3">
+                <tr class="text-white">
+                    <th class="text-center">Type</th>
+                    <th style="width:25%; text-align:center;">Title</th>
+                    <th class="width40per text-center">Description</th>
+                    <th style="text-align: center">Status</th>
+                    <th class="text-center">Created By</th>
+                    <th>Created Date</th>
+                    <th class="text-center">Action</th>
+                </tr>
+            </thead>
+            <tr id="datavalue"></tr>
+            <tbody id="demo">
+                {% include "elements/messages.html" %}
+                {% for content in data %}
+
+                <tr id="row_data_{{ content.id }}" subject="{{content.question_id.subject.id}}" style="display:;">
+                    <td class="EditData custom username text-align:center;" style="text-align:center;">
+                        {{ content.types }}
+                        <span id='types_column'></span>
+                    </td>
+                    <td style="text-align:center; word-break: break-all;">
+                        <span id='title_column'>{{ content.question_title }}</span>
+                    </td>
+                    <td class="EditData width40per" style="text-align:center; word-break: break-all">
+                        {{ content.description }}
+                        <span id="description_column">
+                        </span>
+                    </td>
+                    <td class="text-center">
+
+                        {% if content.status %}
+                        <span class="status-label text-align:center;" id="status_column">Active</span>
+                        {% else %}
+                        <span class="status-label text-align:center;" id="status_column">Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-center">
+                        <span id='created_by_column'>{{ content.created_by }}</span>
+                    </td>
+                    <td>
+                        <span id='created_column'>{{ content.modified|date:"d.m.Y" }}</span>
+                    </td>
+                    <td style="text-align:center;">
+                        <a class="Edit btn btn-info btn-sm waves-effect waves-light editButton"
+                            id="editPassageButton_{{ content.id }}" type="button" data-bs-toggle="modal"
+                            data-bs-target="#passageModal" style="display: inline-block;">Edit</a>
+                        <span style="display: inline-block;">
+                            <form action="/passage_view" method="POST"
+                                onSubmit="return confirm('Do you want to delete this content ?')">
+                                {% csrf_token %}
+                                <input type="hidden" name="method" value="delete"></input>
+                                <input type="hidden" value="{{ content.id }}" name="passageID">
+                                <button class="Delete btn btn-danger btn-sm waves-effect waves-light" type="submit"
+                                    id="Delete">Delete</button>
+                            </form>
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- table content end -->
+{% include 'admin_script.html' %}
+<!-- modal -->
+{% include 'elements/modals/admin_passage_content_modal.html' %}
+<!-- pagination -->
+{% include 'elements/pagination.html' %}
+
+
+<script>
+    $("#addPassageButton").on("click", function () {
+        $("#passage-form").parsley().reset()
+        $("#passage-form")[0].reset()
+        $("#modalHeading").html("Add Content");
+        
+    })
+
+    $(".editButton").on("click", function (e) {
+        $("#passage-form").parsley().reset()
+        $("#modalHeading").html("Edit Content");
+        var row_id = e.currentTarget.id.slice(18,);
+        var row_data = document.getElementById("row_data_" + row_id)
+        var subject = row_data.getAttribute('subject');
+        var types = row_data.cells[0].innerText;
+        var title = row_data.cells[1].innerText;
+        var description = row_data.cells[2].innerText;
+        var status = row_data.cells[3].innerText;
+        if (status == "Active")
+            status = 1;
+        else
+            status = 0;
+
+        $("#passage_settings_types").val(types);
+        $("#passage_settings_title").val(title);
+        $("#passage_content_subject").val(subject);
+        $("#passage_settings_description").val(description);
+        $("#passage_settings_status").val(status);
+        $("#hiddenID").val(row_id);
+        $("#editMethod").val("put");
+    })
+</script>
+</body>
+</html>
